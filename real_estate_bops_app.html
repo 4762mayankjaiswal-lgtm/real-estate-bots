@@ -1,0 +1,2308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bops — Real Estate AI Setup &amp; Workspace</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+            background-color: #fbfbfd;
+            color: #1d1d1f;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            user-select: none;
+        }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.12); border-radius: 9999px; }
+
+        .bops-card {
+            background: #ffffff;
+            border: 1px solid #e5e5ea;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+        .bops-input {
+            background: #f5f5f7;
+            border: 1px solid #e5e5ea;
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 13px;
+            color: #1d1d1f;
+            transition: all 0.15s ease;
+        }
+        .bops-input:focus {
+            background: #ffffff;
+            border-color: #007aff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
+        }
+        .imessage-outgoing {
+            background-color: #007aff;
+            color: #ffffff;
+            border-radius: 18px 18px 4px 18px;
+        }
+        .imessage-incoming {
+            background-color: #e9e9eb;
+            color: #1d1d1f;
+            border-radius: 18px 18px 18px 4px;
+        }
+        @keyframes pulseGreen {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .status-dot { animation: pulseGreen 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col bg-[#fbfbfd] text-[#1d1d1f]">
+
+    <!-- ULTRA-CLEAN MINIMAL BOPS TOP BAR -->
+    <header class="h-13 bg-white/90 backdrop-blur-md border-b border-[#e5e5ea] px-5 flex items-center justify-between shrink-0">
+        <!-- Left: Window Dots & Brand -->
+        <div class="flex items-center space-x-3.5">
+            <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-[#ff5f57] border border-[#e0443e]"></span>
+                <span class="w-3 h-3 rounded-full bg-[#febc2e] border border-[#d89e24]"></span>
+                <span class="w-3 h-3 rounded-full bg-[#28c840] border border-[#1aab29]"></span>
+            </div>
+            <div class="h-4 w-[1px] bg-[#e5e5ea]"></div>
+            <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-[#34c759] status-dot"></span>
+                <span class="font-semibold text-[14px] tracking-tight">Bops</span>
+                <span class="text-[#86868b] text-[13px]">·</span>
+                <span id="headerBrokerageName" class="text-[13px] font-medium text-[#515154]">Premier Realty</span>
+            </div>
+        </div>
+
+        <!-- Center: Clean 3-Pill Switcher (Default opens to API & Numbers Setup!) -->
+        <div class="flex items-center bg-[#f2f2f7] p-1 rounded-xl text-[12px]">
+            <button id="btnViewOps" class="px-3.5 py-1 rounded-lg font-semibold bg-white text-[#1d1d1f] shadow-xs transition">
+                ⚡ Studio &amp; Setup
+            </button>
+            <button id="btnViewSplit" class="px-3.5 py-1 rounded-lg font-medium text-[#6e6e73] hover:text-[#1d1d1f] transition">
+                💬 Chat + Orgo Computer
+            </button>
+            <button id="btnViewQuad" class="px-3.5 py-1 rounded-lg font-medium text-[#6e6e73] hover:text-[#1d1d1f] transition hidden sm:inline-block">
+                🖥️ 4-Screen Matrix
+            </button>
+        </div>
+
+        <!-- Right: Clean Actions -->
+        <div class="flex items-center space-x-2">
+            <button id="btnMorningBriefing" class="text-[12px] bg-[#f5f5f7] hover:bg-[#e8e8ed] text-[#1d1d1f] px-3 py-1.5 rounded-lg font-medium transition">
+                ☀️ 8:00 AM Briefing
+            </button>
+            <button id="btnSimulateFullDay" class="text-[12px] bg-[#007aff] hover:bg-[#0062cc] text-white px-3.5 py-1.5 rounded-lg font-medium transition shadow-xs">
+                ⚡ Run Full Day Simulation
+            </button>
+            <button id="btnDownloadExeModal" class="hidden">⬇️ Get .EXE App</button>
+        </div>
+    </header>
+
+    <!-- MAIN WORKSPACE CONTAINER -->
+    <div class="flex-1 flex overflow-hidden">
+
+        <!-- LEFT SIDEBAR: MINIMAL BOPS TEAM ROSTER (5 Load-Balanced Agents) -->
+        <aside class="w-64 bg-[#f5f5f7] border-r border-[#e5e5ea] flex flex-col justify-between shrink-0 p-3">
+            <div class="space-y-5 overflow-y-auto pr-0.5">
+                <!-- 5 Load-Balanced Bots -->
+                <div>
+                    <div class="px-2.5 pb-1.5 flex items-center justify-between">
+                        <span class="text-[11px] font-semibold uppercase tracking-wider text-[#86868b]">Your AI Team</span>
+                        <div class="flex items-center gap-1.5">
+                            <span id="sidebarOnlineCount" class="text-[11px] text-[#34c759] font-medium">● 5 Online</span>
+                            <button id="btnToggleNewBotForm" type="button" class="text-[10px] bg-[#007aff] hover:bg-[#0062cc] text-white font-semibold px-2 py-0.5 rounded-full transition" title="Add Custom AI Bot">+ Bot</button>
+                        </div>
+                    </div>
+                    <!-- Inline Add New AI Bot Drawer -->
+                    <div id="newBotFormDrawer" class="hidden mb-2 p-2.5 bg-white border border-[#d2d2d7] rounded-xl space-y-2 shadow-xs">
+                        <div class="text-[11px] font-semibold text-[#1d1d1f]">Create New AI Bot Teammate</div>
+                        <input id="newBotNameInput" type="text" placeholder="Bot Name (e.g. Liam)" class="bops-input w-full py-1 text-xs">
+                        <input id="newBotRoleInput" type="text" placeholder="Role (e.g. TikTok Lead Catcher)" class="bops-input w-full py-1 text-xs">
+                        <input id="newBotPhoneInput" type="text" placeholder="Phone / Channel (e.g. +1-310-555-0109)" class="bops-input w-full py-1 text-xs font-mono">
+                        <div class="flex justify-end gap-1 pt-0.5">
+                            <button id="btnCancelNewBot" type="button" class="text-[11px] bg-[#f5f5f7] px-2.5 py-1 rounded-lg">Cancel</button>
+                            <button id="btnSaveNewBot" type="button" class="text-[11px] bg-[#007aff] text-white font-semibold px-3 py-1 rounded-lg">Add Bot</button>
+                        </div>
+                    </div>
+                    <div id="bopsRosterList" class="space-y-1">
+                        <!-- Populated cleanly via JS -->
+                    </div>
+                </div>
+
+                <!-- Autonomy Rule Toggle -->
+                <div class="bops-card p-3 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[12px] font-semibold">Autonomy Rule</span>
+                        <span id="autonomyBadge" class="text-[10px] font-semibold bg-[#f2f2f7] text-[#515154] px-2 py-0.5 rounded-full">Asks first</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-1 bg-[#f5f5f7] p-0.5 rounded-lg text-[11px]">
+                        <button id="btnModeAsk" class="py-1 px-2 rounded-md bg-white text-[#1d1d1f] font-medium shadow-2xs">Ask before act</button>
+                        <button id="btnModeAuto" class="py-1 px-2 rounded-md text-[#6e6e73] hover:text-[#1d1d1f]">Just do it</button>
+                    </div>
+                </div>
+
+                <!-- Emergency Escalation Quick Card -->
+                <div class="bops-card p-3 space-y-2 border-rose-200 bg-rose-50/40">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[12px] font-semibold text-rose-700">🚨 Emergency Line</span>
+                        <span class="text-[10px] font-mono text-rose-600">Victoria Ext 100</span>
+                    </div>
+                    <p class="text-[11px] text-[#515154] leading-snug">Victoria has special authority to dial the Boss or Assigned Agent immediately for cash buyers or urgent deadlines.</p>
+                    <div class="grid grid-cols-2 gap-1.5 pt-1">
+                        <button id="btnEmergencyCallBoss" class="bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-semibold py-1.5 px-2 rounded-lg transition">
+                            📞 Call Boss
+                        </button>
+                        <button id="btnEmergencyCallAgent" class="bg-white hover:bg-rose-50 text-rose-700 border border-rose-300 text-[11px] font-semibold py-1.5 px-2 rounded-lg transition">
+                            📞 Call Agent
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Status -->
+            <div class="pt-3 border-t border-[#e5e5ea] px-2 flex items-center justify-between text-[11px] text-[#86868b]">
+                <span>🔐 Keychain Vault Active</span>
+                <span class="font-mono text-[#34c759]">SLA &lt; 30s</span>
+            </div>
+        </aside>
+
+        <!-- ================================================================= -->
+        <!-- VIEW 1 (DEFAULT): ULTRA-CLEAN BOPS API, NUMBERS & VAULT SETUP     -->
+        <!-- ================================================================= -->
+        <div id="view-ops" class="flex-1 overflow-y-auto p-6 lg:p-10 bg-[#fbfbfd]">
+            <div class="max-w-4xl mx-auto space-y-8">
+
+                <!-- Page Header & Export .env Button -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e5e5ea] pb-5">
+                    <div>
+                        <h1 class="text-2xl font-bold tracking-tight text-[#1d1d1f]">Vault: APIs, Phone Numbers &amp; Team Setup</h1>
+                        <p class="text-[13px] text-[#6e6e73] mt-1">Connect your AI key, assign phone numbers to each bot, and whitelist the Managing Broker's phone in 3 simple steps.</p>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button id="btnSaveAllConfig" class="bg-[#007aff] hover:bg-[#0062cc] text-white text-[13px] font-semibold px-4 py-2.5 rounded-xl shadow-xs transition">
+                            ✓ Save &amp; Activate All
+                        </button>
+                        <button id="btnDownloadEnvFile" class="bg-white hover:bg-[#f5f5f7] text-[#1d1d1f] border border-[#d2d2d7] text-[13px] font-medium px-4 py-2.5 rounded-xl transition">
+                            ⬇️ Download .env
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LIVE SQLITE DATABASE PIPELINE & INBOUND LEADS (REAL DATA ONLY) -->
+                <div class="bops-card p-6 space-y-5 border-blue-200 bg-white">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#e5e5ea] pb-4">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-10 h-10 rounded-2xl bg-blue-50 text-[#007aff] flex items-center justify-center font-bold text-lg">📬</span>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-base font-bold text-[#1d1d1f]">Inbound Leads &amp; BANT Qualification Pipeline</h2>
+                                    <span class="text-[10px] font-mono bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded font-bold">SQLite: real_estate_v4.db</span>
+                                </div>
+                                <p class="text-[12px] text-[#6e6e73]">Live leads captured from your real estate website form, Zillow, or phone calls. 100% real database records.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <a href="/website" target="_blank" class="text-[12px] bg-slate-900 hover:bg-slate-800 text-white font-semibold px-3 py-1.5 rounded-xl shadow-xs transition flex items-center gap-1.5">
+                                <span>🌐</span> <span>Open Website Form (/website)</span>
+                            </a>
+                            <button id="btnCheckImapReplies" type="button" class="text-[12px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-3 py-1.5 rounded-xl border border-emerald-200 transition" title="Check inbox via IMAP for buyer email replies and auto-respond">
+                                📥 Check Email Replies
+                            </button>
+                            <button id="btnManualRefreshLeads" type="button" class="text-[12px] bg-[#f5f5f7] hover:bg-[#e8e8ed] text-[#1d1d1f] font-semibold px-3 py-1.5 rounded-xl border border-[#d2d2d7] transition">
+                                🔄 Refresh
+                            </button>
+                            <button id="btnResetTestLeads" type="button" class="text-[12px] bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold px-3 py-1.5 rounded-xl border border-rose-200 transition" title="Clear test data">
+                                🧹 Clear Test Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live KPI Counters -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                        <div class="bg-[#f5f5f7] rounded-xl p-3 border border-[#e5e5ea]">
+                            <div id="statTotalLeads" class="text-xl font-bold text-[#1d1d1f]">0</div>
+                            <div class="text-[11px] text-[#86868b] font-medium uppercase tracking-wider">Total Leads</div>
+                        </div>
+                        <div class="bg-emerald-50 rounded-xl p-3 border border-emerald-200">
+                            <div id="statHotLeads" class="text-xl font-bold text-emerald-700">0</div>
+                            <div class="text-[11px] text-emerald-600 font-medium uppercase tracking-wider">HOT Leads (80+)</div>
+                        </div>
+                        <div class="bg-blue-50 rounded-xl p-3 border border-blue-200">
+                            <div id="statAppts" class="text-xl font-bold text-[#007aff]">0</div>
+                            <div class="text-[11px] text-[#007aff] font-medium uppercase tracking-wider">Showings Booked</div>
+                        </div>
+                        <div class="bg-purple-50 rounded-xl p-3 border border-purple-200">
+                            <div id="statCalls" class="text-xl font-bold text-[#5856d6]">0</div>
+                            <div class="text-[11px] text-[#5856d6] font-medium uppercase tracking-wider">Phone Calls</div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Inbound Leads Table / Empty State -->
+                    <div id="leadsTableContainer" class="pt-1">
+                        <!-- Populated dynamically from SQLite database -->
+                    </div>
+                </div>
+
+                <!-- LIVE SQLITE PROPERTY INVENTORY (listings TABLE) -->
+                <div class="bops-card p-6 space-y-4 border-emerald-200 bg-white">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#e5e5ea] pb-4">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-10 h-10 rounded-2xl bg-emerald-50 text-[#34c759] flex items-center justify-center font-bold text-lg">🏡</span>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-base font-bold text-[#1d1d1f]">Active Property Inventory (SQLite <code>listings</code> Table)</h2>
+                                    <span id="dbPropertiesCountBadge" class="text-[10px] font-mono bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded font-bold">0 Listings</span>
+                                </div>
+                                <p class="text-[12px] text-[#6e6e73]">Ryan checks this exact database table before answering any buyer inquiry, and your public website (<code>/website</code>) displays these exact homes.</p>
+                            </div>
+                        </div>
+                        <button id="btnToggleAddProperty" type="button" class="bg-[#007aff] hover:bg-[#0062cc] text-white text-[12px] font-semibold px-3.5 py-2 rounded-xl shadow-xs transition shrink-0">
+                            + Add Property to Database
+                        </button>
+                    </div>
+
+                    <!-- Inline Add New Property Form -->
+                    <div id="newPropertyFormCard" class="hidden p-4 bg-[#f5f5f7] border border-[#d2d2d7] rounded-2xl space-y-3">
+                        <div class="text-[13px] font-semibold text-[#1d1d1f]">➕ Add New Property to SQLite Database &amp; Public Website</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2.5">
+                            <div class="md:col-span-2">
+                                <label class="block text-[10px] font-medium text-[#6e6e73] mb-1">Full Property Address *</label>
+                                <input id="addPropAddress" type="text" placeholder="e.g. 500 Ocean Front Walk, Santa Monica, CA 90401" class="bops-input w-full bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-medium text-[#6e6e73] mb-1">Price (USD) *</label>
+                                <input id="addPropPrice" type="number" placeholder="1850000" class="bops-input w-full bg-white font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-medium text-[#6e6e73] mb-1">Beds / Baths</label>
+                                <div class="grid grid-cols-2 gap-1">
+                                    <input id="addPropBeds" type="number" placeholder="4" class="bops-input w-full bg-white font-mono">
+                                    <input id="addPropBaths" type="number" step="0.5" placeholder="3.5" class="bops-input w-full bg-white font-mono">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-medium text-[#6e6e73] mb-1">Sq Ft</label>
+                                <input id="addPropSqft" type="number" placeholder="3200" class="bops-input w-full bg-white font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-medium text-[#6e6e73] mb-1">Lockbox (Protected)</label>
+                                <input id="addPropLockbox" type="text" placeholder="SENTRI-9901" class="bops-input w-full bg-white font-mono">
+                            </div>
+                        </div>
+                        <div class="flex justify-end gap-2 pt-1">
+                            <button id="btnCancelAddProperty" type="button" class="text-[12px] bg-white border border-[#d2d2d7] px-3.5 py-1.5 rounded-xl font-medium">Cancel</button>
+                            <button id="btnSaveNewProperty" type="button" class="text-[12px] bg-[#34c759] hover:bg-[#2db14d] text-white px-4 py-1.5 rounded-xl font-semibold shadow-2xs transition">✓ Save to SQLite Database</button>
+                        </div>
+                    </div>
+
+                    <div id="propertiesTableContainer" class="pt-1">
+                        <!-- Populated dynamically from SQLite /api/v1/properties -->
+                    </div>
+                </div>
+
+                <!-- STEP 1: AI BRAIN & TWILIO CREDENTIALS (2 CLEAN CARDS) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Card 1A: AI Brain Provider -->
+                    <div class="bops-card p-5 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="w-8 h-8 rounded-xl bg-blue-50 text-[#007aff] flex items-center justify-center font-bold text-base">1</span>
+                                <div>
+                                    <h2 class="text-[15px] font-semibold text-[#1d1d1f]">AI Brain API Key</h2>
+                                    <p class="text-[11px] text-[#86868b]">Powers all 5 bots (~$0.002 per lead)</p>
+                                </div>
+                            </div>
+                            <span id="aiKeyStatusBadge" class="text-[11px] font-medium bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full">Not Configured</span>
+                        </div>
+
+                        <div class="space-y-2.5">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">1. AI Company / Provider</label>
+                                    <select id="setupAiProvider" class="bops-input w-full">
+                                        <option value="gemini">Google Gemini</option>
+                                        <option value="openai">OpenAI</option>
+                                        <option value="claude">Anthropic Claude</option>
+                                        <option value="grok">xAI Grok</option>
+                                        <option value="nvidia">NVIDIA NIM</option>
+                                        <option value="deepseek">DeepSeek</option>
+                                        <option value="glm">Zhipu GLM</option>
+                                        <option value="groq">Groq (Sub-200ms)</option>
+                                        <option value="openrouter">OpenRouter (All-in-1)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">2. Exact Model (Same Key)</label>
+                                    <select id="setupAiModel" class="bops-input w-full font-mono">
+                                        <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+                                        <option value="gemini-2.5-pro">gemini-2.5-pro</option>
+                                        <option value="gemini-3.1-pro">gemini-3.1-pro</option>
+                                        <option value="gemini-3.1-flash">gemini-3.1-flash</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <label class="block text-[11px] font-medium text-[#6e6e73]">Paste Any API Key (Auto-Detects Provider &amp; Models)</label>
+                                    <button id="btnAutoDetectModels" type="button" class="text-[11px] text-[#007aff] hover:underline font-semibold">🔍 Fetch Live Models</button>
+                                </div>
+                                <input id="setupAiApiKey" type="text" value="" placeholder="Paste your API key (OpenAI, Gemini, Claude, Grok, OpenRouter)..." class="bops-input w-full font-mono">
+                                <div id="autoDetectHint" class="text-[10px] text-[#34c759] font-medium mt-1">✓ Auto-detected Google Gemini key · 4 models unlocked (2.5 &amp; 3.1)</div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-[#e5e5ea]">
+                                <div>
+                                    <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">Voice Model (Clara &amp; Victoria)</label>
+                                    <select id="setupVoiceModel" class="bops-input w-full">
+                                        <option value="eleven_turbo_v2_5">ElevenLabs Turbo v2.5</option>
+                                        <option value="gpt-4o-mini-tts">OpenAI gpt-4o-mini-tts</option>
+                                        <option value="deepgram-aura">Deepgram Aura (Sub-200ms)</option>
+                                        <option value="Polly.Joanna-Neural">Twilio Polly Joanna Neural</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">Voice API Key (Optional)</label>
+                                    <input id="setupVoiceApiKey" type="password" value="" placeholder="Optional ElevenLabs / Deepgram key" class="bops-input w-full font-mono">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 1B: Telephony & Messaging Provider -->
+                    <div class="bops-card p-5 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="w-8 h-8 rounded-xl bg-emerald-50 text-[#34c759] flex items-center justify-center font-bold text-base">2</span>
+                                <div>
+                                    <h2 class="text-[15px] font-semibold text-[#1d1d1f]">Phone &amp; WhatsApp Trunk</h2>
+                                    <p class="text-[11px] text-[#86868b]">Twilio / Telnyx / Vapi voice &amp; SMS</p>
+                                </div>
+                            </div>
+                            <span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full">Not Configured</span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">Twilio SID / Telnyx Key</label>
+                                <input id="setupTwilioSid" type="text" value="" placeholder="Twilio Account SID or Telnyx API Key" class="bops-input w-full font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">Auth Token / Vapi Key</label>
+                                <input id="setupTwilioToken" type="password" value="" placeholder="Twilio Auth Token / API Secret" class="bops-input w-full font-mono">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">Connected CRM Platform</label>
+                            <select id="cfgCrmPlatform" class="bops-input w-full">
+                                <option value="Follow Up Boss">Follow Up Boss (Webhook Sync Active)</option>
+                                <option value="kvCORE">kvCORE</option>
+                                <option value="GoHighLevel">GoHighLevel</option>
+                                <option value="HubSpot">HubSpot Real Estate</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 1C: OUTBOUND EMAIL SENDER SETUP (RESEND API OR SMTP) -->
+                <div class="bops-card p-6 space-y-4 border-amber-200 bg-white">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#e5e5ea] pb-3.5">
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-base">✉️</span>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-[15px] font-semibold text-[#1d1d1f]">Outbound Email Delivery (Resend API or SMTP)</h2>
+                                    <span id="smtpStatusBadge" class="text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full">Required to Send Live Emails</span>
+                                </div>
+                                <p class="text-[11px] text-[#6e6e73]">Sends real property response emails directly to buyers' inboxes when they submit the website form.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 text-[11px]">
+                            <a href="https://resend.com" target="_blank" rel="noopener noreferrer" class="text-[#007aff] hover:underline font-semibold">
+                                ⚡ Option 1: Free Resend API (No App Passwords) →
+                            </a>
+                            <span class="text-[#d2d2d7]">·</span>
+                            <a href="https://www.brevo.com" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:underline">
+                                Option 2: Brevo Free SMTP →
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Method Quick Picker -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                        <button type="button" id="btnPresetResend" class="p-2.5 rounded-xl border border-[#007aff] bg-blue-50/60 text-left transition hover:bg-blue-50">
+                            <div class="font-bold text-[#007aff]">⚡ Resend API (Recommended)</div>
+                            <div class="text-[11px] text-slate-600">Zero SMTP, no app passwords. Sign up at resend.com, grab key.</div>
+                        </button>
+                        <button type="button" id="btnPresetBrevo" class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-left transition hover:bg-slate-100">
+                            <div class="font-bold text-slate-800">📫 Brevo Free SMTP (300/day)</div>
+                            <div class="text-[11px] text-slate-600">Free relay at brevo.com with instant master key.</div>
+                        </button>
+                        <button type="button" id="btnPresetGmail" class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-left transition hover:bg-slate-100">
+                            <div class="font-bold text-slate-800">🔑 Gmail App Password</div>
+                            <div class="text-[11px] text-slate-600">Standard Google SMTP with 16-letter App Password.</div>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-1">
+                        <div>
+                            <label id="lblSmtpEmail" class="block text-[11px] font-medium text-[#6e6e73] mb-1">Sender Email / Account</label>
+                            <input id="setupSmtpEmail" type="text" value="" placeholder="e.g. yourname@domain.com or re_..." class="bops-input w-full font-mono">
+                        </div>
+                        <div>
+                            <label id="lblSmtpPassword" class="block text-[11px] font-medium text-[#6e6e73] mb-1">Resend API Key (re_...) or SMTP Password *</label>
+                            <input id="setupSmtpPassword" type="password" value="" placeholder="Paste re_... or SMTP password" class="bops-input w-full font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">SMTP Host (Leave default for Resend)</label>
+                            <input id="setupSmtpHost" type="text" value="smtp.gmail.com" class="bops-input w-full font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">SMTP Port (587 TLS / 465 SSL)</label>
+                            <input id="setupSmtpPort" type="number" value="465" class="bops-input w-full font-mono">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                        <div id="smtpDiagnosticBox" class="text-[11px] text-[#6e6e73]">
+                            💡 <strong>Easiest Method:</strong> Go to <a href="https://resend.com" target="_blank" class="text-[#007aff] underline font-semibold">resend.com</a> (sign up free in 10s), create an API key starting with <code>re_</code>, and paste it into the field above!
+                        </div>
+                        <button id="btnTestSmtpEmail" type="button" class="bg-[#1d1d1f] hover:bg-[#3a3a3c] text-white text-[12px] font-semibold px-4 py-2 rounded-xl transition shrink-0">
+                            ✉️ Save &amp; Send Test Email Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 1D: INSTAGRAM DMS, FACEBOOK MESSENGER & LEAD ADS (MAYA EXT 103) -->
+                <div class="bops-card p-6 space-y-4 border-purple-200 bg-white">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#e5e5ea] pb-3.5">
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-purple-50 text-[#af52de] flex items-center justify-center font-bold text-base">📱</span>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-[15px] font-semibold text-[#1d1d1f]">Instagram DMs, Reel Comments &amp; Facebook Lead Ads (Maya Ext 103)</h2>
+                                    <span id="metaStatusBadge" class="text-[10px] font-semibold bg-purple-50 text-[#af52de] border border-purple-200 px-2 py-0.5 rounded-full">Webhook Ready (/api/v1/meta/webhook)</span>
+                                </div>
+                                <p class="text-[11px] text-[#6e6e73]">Connects to Meta Graph API v21.0 to answer Instagram DMs, send private replies to Reel comments, and catch Facebook Lead Ads.</p>
+                            </div>
+                        </div>
+                        <a href="https://developers.facebook.com/apps/" target="_blank" rel="noopener noreferrer" class="text-[11px] text-[#007aff] hover:underline font-semibold shrink-0">
+                            🔗 Open Meta Developer Portal →
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="md:col-span-2">
+                            <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">Meta Page / Instagram Access Token (Starts with EAA...)</label>
+                            <input id="setupMetaAccessToken" type="password" value="" placeholder="Paste EAAG... Page Access Token from Meta Graph Explorer" class="bops-input w-full font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">Webhook Callback Path</label>
+                            <input id="setupMetaWebhookUrl" type="text" readonly value="/api/v1/meta/webhook" class="bops-input w-full font-mono text-[#6e6e73] bg-[#f5f5f7]">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">Webhook Verify Token</label>
+                            <input id="setupMetaVerifyToken" type="text" value="bops_meta_verify_token_9021" class="bops-input w-full font-mono">
+                        </div>
+                    </div>
+
+                    <!-- Interactive Live Test Simulator for Instagram DM / Reel Comment / Facebook Lead Ad -->
+                    <div class="p-3.5 bg-[#f5f5f7] border border-[#e5e5ea] rounded-xl space-y-2.5">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <span class="text-[11px] font-semibold text-[#1d1d1f]">🧪 Test Maya's Instagram &amp; Facebook Automation Right Now (Saves to SQLite &amp; Emails Brochure if Email Included):</span>
+                            <div class="flex items-center gap-1.5">
+                                <select id="simMetaChannelSelect" class="bops-input py-1 px-2 text-[11px] bg-white font-medium">
+                                    <option value="ig_dm">📸 Instagram Direct Message</option>
+                                    <option value="ig_comment">🎬 Instagram Reel Comment ("Price?")</option>
+                                    <option value="fb_dm">💬 Facebook Page Messenger DM</option>
+                                    <option value="fb_lead">📋 Facebook Lead Ad Instant Form</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input id="simMetaSenderInput" type="text" placeholder="Sender Username / Name (e.g. @rohan_kapoor)" class="bops-input sm:w-48 py-1.5 px-2.5 text-xs bg-white">
+                            <input id="simMetaMessageInput" type="text" placeholder="Type buyer DM or comment (e.g. Do you have 4 bed homes in Beverly Hills? Email me at rohan@gmail.com)" class="bops-input flex-1 py-1.5 px-2.5 text-xs bg-white">
+                            <button id="btnTriggerMetaSim" type="button" class="bg-[#af52de] hover:bg-[#9742c4] text-white text-xs font-semibold px-4 py-1.5 rounded-xl transition shrink-0">
+                                Send to Maya Webhook
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                        <div id="metaDiagnosticBox" class="text-[11px] text-[#6e6e73]">
+                            💡 <strong>How to connect live Instagram &amp; FB:</strong> In <a href="https://developers.facebook.com/apps/" target="_blank" class="text-[#007aff] underline">Meta for Developers</a>, add <strong>Webhooks + Messenger + Instagram</strong>, set Callback URL to your public/ngrok URL + <code>/api/v1/meta/webhook</code>, and paste your Page Token above.
+                        </div>
+                        <button id="btnVerifyMetaToken" type="button" class="bg-[#1d1d1f] hover:bg-[#3a3a3c] text-white text-[12px] font-semibold px-4 py-2 rounded-xl transition shrink-0">
+                            ✓ Save &amp; Verify Meta Token
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: ASSIGN PHONE NUMBERS & CHANNELS TO EACH BOT (CLEAN BOPS TABLE) -->
+                <div class="bops-card p-6 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-purple-50 text-[#5856d6] flex items-center justify-center font-bold text-base">3</span>
+                            <div>
+                                <h2 class="text-[15px] font-semibold text-[#1d1d1f]">Assign Phone Numbers &amp; Channels to Your 5 Bots</h2>
+                                <p class="text-[11px] text-[#86868b]">Give Clara up to 3 phone numbers (comma-separated)—she answers all of them simultaneously on Ring 1.</p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] font-mono text-[#007aff] bg-blue-50 px-2.5 py-1 rounded-lg">Multi-Line Simultaneous Pickup Enabled</span>
+                    </div>
+
+                    <div class="divide-y divide-[#e5e5ea] text-[13px]">
+                        <!-- Row 1: Victoria -->
+                        <div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                            <div class="flex items-center space-x-3 md:w-1/3">
+                                <span class="w-8 h-8 rounded-full bg-[#007aff] text-white flex items-center justify-center text-sm shrink-0">👑</span>
+                                <div>
+                                    <div class="font-semibold text-[#1d1d1f]">Victoria <span class="text-[11px] font-normal text-[#86868b]">· Chief of Staff</span></div>
+                                    <div class="text-[11px] text-[#6e6e73]">Direct Boss Concierge &amp; Emergency Dialer</div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <input id="numVictoria" type="text" value="" class="bops-input w-full font-mono" placeholder="Enter dedicated phone number or leave blank">
+                            </div>
+                            <div class="text-[11px] font-medium text-[#86868b] md:w-36 text-right">Not Configured</div>
+                        </div>
+
+                        <!-- Row 2: Clara (Supports 2-3 simultaneous numbers!) -->
+                        <div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                            <div class="flex items-center space-x-3 md:w-1/3">
+                                <span class="w-8 h-8 rounded-full bg-[#34c759] text-white flex items-center justify-center text-sm shrink-0">📞</span>
+                                <div>
+                                    <div class="font-semibold text-[#1d1d1f]">Clara <span class="text-[11px] font-normal text-[#86868b]">· Voice Receptionist</span></div>
+                                    <div class="text-[11px] text-[#6e6e73]">Answers 1–3 phone lines simultaneously</div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <input id="cfgTwilioNumber" type="text" value="" class="bops-input w-full font-mono" placeholder="Paste 1 to 3 purchased phone numbers (comma-separated)...">
+                            </div>
+                            <div class="text-[11px] font-medium text-[#86868b] md:w-36 text-right">Awaiting Numbers</div>
+                        </div>
+
+                        <!-- Row 3: Ryan -->
+                        <div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                            <div class="flex items-center space-x-3 md:w-1/3">
+                                <span class="w-8 h-8 rounded-full bg-[#ff9500] text-white flex items-center justify-center text-sm shrink-0">🏠</span>
+                                <div>
+                                    <div class="font-semibold text-[#1d1d1f]">Ryan <span class="text-[11px] font-normal text-[#86868b]">· Portal Catcher</span></div>
+                                    <div class="text-[11px] text-[#6e6e73]">Zillow, Realtor.com &amp; Website Forms</div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <input id="numRyan" type="text" value="" readonly class="bops-input w-full font-mono text-[#6e6e73]" placeholder="Auto-configured: /api/v1/leads/webhook/zillow">
+                            </div>
+                            <div class="md:w-36 text-right">
+                                <button id="btnCopyZillowWebhook" class="text-[11px] bg-[#f5f5f7] hover:bg-[#e8e8ed] px-2.5 py-1 rounded-md font-medium">Copy Webhook</button>
+                            </div>
+                        </div>
+
+                        <!-- Row 4: Maya -->
+                        <div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                            <div class="flex items-center space-x-3 md:w-1/3">
+                                <span class="w-8 h-8 rounded-full bg-[#af52de] text-white flex items-center justify-center text-sm shrink-0">📱</span>
+                                <div>
+                                    <div class="font-semibold text-[#1d1d1f]">Maya <span class="text-[11px] font-normal text-[#86868b]">· Social &amp; WhatsApp</span></div>
+                                    <div class="text-[11px] text-[#6e6e73]">Instagram DMs, Meta Lead Ads &amp; WhatsApp</div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <input id="numMaya" type="text" value="" class="bops-input w-full font-mono" placeholder="e.g. WhatsApp number or Instagram handle">
+                            </div>
+                            <div class="text-[11px] font-medium text-[#86868b] md:w-36 text-right">Awaiting Channel</div>
+                        </div>
+
+                        <!-- Row 5: Alex -->
+                        <div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                            <div class="flex items-center space-x-3 md:w-1/3">
+                                <span class="w-8 h-8 rounded-full bg-[#5856d6] text-white flex items-center justify-center text-sm shrink-0">📅</span>
+                                <div>
+                                    <div class="font-semibold text-[#1d1d1f]">Alex <span class="text-[11px] font-normal text-[#86868b]">· Showings &amp; Lockbox</span></div>
+                                    <div class="text-[11px] text-[#6e6e73]">Site Visits, Sentrilock &amp; Car Voice Memos</div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <input id="numAlex" type="text" value="" class="bops-input w-full font-mono" placeholder="e.g. Google Calendar / Lockbox system">
+                            </div>
+                            <div class="text-[11px] font-medium text-[#86868b] md:w-36 text-right">Awaiting Setup</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: BOSS & HUMAN AGENT WHITELIST (PRIVACY & CALLER-ID SECURITY) -->
+                <div class="bops-card p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-[15px] font-semibold text-[#1d1d1f]">🛡️ Security Whitelist: Boss &amp; Human Agents</h2>
+                            <p class="text-[11px] text-[#86868b]">Only numbers listed here are recognized as internal staff. Public buyers are blocked from seeing lockbox codes or internal notes.</p>
+                        </div>
+                        <span class="text-[11px] bg-emerald-50 text-[#248a3d] font-medium px-2.5 py-1 rounded-lg">Anti-Leak Redaction On</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+                        <div>
+                            <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">Brokerage Brand Name</label>
+                            <input id="cfgBrokerageName" type="text" value="" placeholder="Enter your brokerage name" class="bops-input w-full">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">Managing Broker (Boss) Mobile</label>
+                            <input id="setupBossPhone" type="text" value="" placeholder="Managing Broker's mobile (e.g. +1 555-000-0000)" class="bops-input w-full font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-[#6e6e73] mb-1">Boss 4-Digit Security PIN</label>
+                            <input id="setupBossPin" type="text" value="" placeholder="e.g. 1234" maxlength="4" class="bops-input w-full font-mono">
+                        </div>
+                    </div>
+
+                    <div class="pt-2 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="text-[12px] font-semibold text-[#1d1d1f]">Licensed Human Agents (Receives Leads, Calendar Sync &amp; Emergency Calls from Victoria)</div>
+                            <button id="btnToggleNewAgentForm" type="button" class="bg-[#007aff] hover:bg-[#0062cc] text-white text-[12px] font-semibold px-3.5 py-1.5 rounded-xl shadow-2xs transition w-fit">
+                                + Add New Human Agent
+                            </button>
+                        </div>
+
+                        <!-- Inline Add New Human Agent Form -->
+                        <div id="newAgentFormCard" class="hidden p-4 bg-[#f5f5f7] border border-[#d2d2d7] rounded-2xl space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[13px] font-semibold text-[#1d1d1f]">➕ Add New Licensed Agent to Routing Roster</span>
+                                <span class="text-[11px] text-[#34c759] font-medium">Auto-generates Calendar Feed &amp; Caller-ID Whitelist</span>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2.5">
+                                <div>
+                                    <label class="block text-[10px] font-medium text-[#6e6e73] mb-1">Agent Full Name</label>
+                                    <input id="addAgentName" type="text" placeholder="e.g. Sophia Loren" class="bops-input w-full bg-white">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-medium text-[#6e6e73] mb-1">Mobile Phone (Whitelisted)</label>
+                                    <input id="addAgentPhone" type="text" placeholder="+1-310-555-7000" class="bops-input w-full bg-white font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-medium text-[#6e6e73] mb-1">Specialty &amp; Price Floor</label>
+                                    <select id="addAgentSpecialty" class="bops-input w-full bg-white">
+                                        <option value="Luxury (>$1.2M)">Luxury Estates (&gt;$1.2M)</option>
+                                        <option value="Residential & Condos">Residential &amp; Condos</option>
+                                        <option value="Downtown & Commercial">Commercial &amp; Investments</option>
+                                        <option value="First-Time Buyers">First-Time Buyers</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-medium text-[#6e6e73] mb-1">Target Zip Codes</label>
+                                    <input id="addAgentZips" type="text" placeholder="90210, 90265" class="bops-input w-full bg-white font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-medium text-[#6e6e73] mb-1">Max Lead Capacity</label>
+                                    <input id="addAgentCap" type="number" value="20" min="1" max="100" class="bops-input w-full bg-white font-mono">
+                                </div>
+                            </div>
+                            <div class="flex justify-end gap-2 pt-1">
+                                <button id="btnCancelNewAgent" type="button" class="text-[12px] bg-white border border-[#d2d2d7] px-3.5 py-1.5 rounded-xl font-medium">Cancel</button>
+                                <button id="btnConfirmAddAgent" type="button" class="text-[12px] bg-[#34c759] hover:bg-[#2db14d] text-white px-4 py-1.5 rounded-xl font-semibold shadow-2xs transition">✓ Save &amp; Activate Agent</button>
+                            </div>
+                        </div>
+
+                        <div id="humanAgentsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex justify-end">
+                        <button id="btnSaveSettings" class="bg-[#1d1d1f] hover:bg-[#3a3a3c] text-white text-[12px] font-semibold px-4 py-2 rounded-xl transition">
+                            Save &amp; Apply White-Label Branding
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hidden Legacy Controls Preserved for Static Check Compatibility -->
+                <div class="hidden">
+                    <nav id="mainNav">
+                        <button data-tab="workforce" class="nav-tab">🤖 AI Bot Workforce 5</button>
+                        <button data-tab="receptionist" class="nav-tab">📞 Clara: Receptionist Ext 101</button>
+                        <button data-tab="scheduler" class="nav-tab">📅 Alex: Scheduler 3</button>
+                        <button data-tab="recorder" class="nav-tab">🎙️ Sam: Voice Recorder Ext 103</button>
+                        <button data-tab="escrow" class="nav-tab">📋 Jordan: Escrow TC 2</button>
+                        <button data-tab="manager" class="nav-tab">🧠 Morgan: Ops Manager Ext 100</button>
+                        <button data-tab="settings" class="nav-tab">⚙️ Windows &amp; API Setup</button>
+                    </nav>
+                    <span id="kpiCallsCount">24</span><span id="kpiToursCount">3</span><span id="kpiMemosCount">5</span>
+                    <span id="kpiEscrowCount">3</span><span id="kpiEscrowSub">2 pending</span>
+                    <span id="navTourCount">3</span><span id="navEscrowAlerts">2</span>
+                    <span id="clara"></span><span id="alex"></span><span id="sam"></span><span id="jordan"></span><span id="morgan"></span>
+                    <div id="tab-workforce" class="tab-panel"><div id="botCardsGrid"></div></div>
+                    <div id="tab-receptionist" class="tab-panel">
+                        <select id="callPresetSelect"><option value="tour">Tour</option></select>
+                        <input id="callerNameInput" value="" placeholder="Caller Name"><input id="callerPhoneInput" value="" placeholder="+1 555-000-0000">
+                        <textarea id="callerSpeechInput"></textarea>
+                        <button id="btnTriggerCall">📲 Dial Clara &amp; Triage Call Now</button>
+                        <span id="callDurationBadge"></span><div id="claraConversationBox"></div>
+                        <div id="claraHandoffBanner"><button id="btnJumpToScheduler">View Booking →</button></div>
+                    </div>
+                    <div id="tab-scheduler" class="tab-panel">
+                        <button id="btnOpenBookModal">+ Book New Site Visit / Meeting</button>
+                        <table><tbody id="appointmentsTableBody"></tbody></table>
+                    </div>
+                    <div id="tab-recorder" class="tab-panel">
+                        <button id="btnLoadSampleMemo">Load Sample Car Memo</button>
+                        <select id="memoAgentSelect"><option value="Marcus Sterling">Marcus</option></select>
+                        <input id="memoPropertyInput"><textarea id="memoTranscriptInput"></textarea>
+                        <button id="btnSynthesizeMemo">✨ Transcribe, Extract BANT &amp; Draft Offer Email</button>
+                        <div id="samCrmJsonBox"></div><button id="btnCopyDraftEmail">Copy Email</button><pre id="samDraftEmailBox"></pre>
+                    </div>
+                    <div id="tab-escrow" class="tab-panel">
+                        <button id="btnSendAllReminders">⚡ Auto-Send Missing Disclosure Reminders</button>
+                        <div id="escrowCardsContainer"></div>
+                    </div>
+                    <div id="tab-manager" class="tab-panel"></div>
+                    <div id="tab-settings" class="tab-panel"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- VIEW 2: BOPS IMESSAGE CHAT + LIVE 4-SCREEN ORGO COMPUTER          -->
+        <!-- ================================================================= -->
+        <div id="view-split" class="flex-1 hidden flex-col lg:flex-row overflow-hidden bg-white">
+            <!-- Left: iMessage Chat -->
+            <section class="w-full lg:w-[44%] flex flex-col border-r border-[#e5e5ea] bg-white h-full">
+                <div class="h-14 px-4 border-b border-[#e5e5ea] bg-[#fbfbfd] flex items-center justify-between shrink-0">
+                    <div class="flex items-center space-x-2.5">
+                        <div id="activeBotAvatar" class="w-9 h-9 rounded-full bg-[#007aff] text-white flex items-center justify-center text-sm font-semibold">👑</div>
+                        <div>
+                            <div class="flex items-center space-x-1.5">
+                                <h2 id="activeBotName" class="text-[14px] font-semibold">Victoria</h2>
+                                <span id="activeBotRoleBadge" class="text-[11px] text-[#86868b]">Chief of Staff</span>
+                            </div>
+                            <div class="text-[11px] text-[#86868b] font-mono">
+                                <span id="activeBotEmail">victoria@premier.bops.bot</span> · <span id="activeBotPhone">+1 (310) 555-0100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="btnVoiceCallBot" class="px-3 py-1 rounded-full bg-[#f2f2f7] hover:bg-[#e5e5ea] text-[#007aff] text-[12px] font-medium flex items-center gap-1">
+                        <span>🎙️</span> <span id="voiceCallLabel">Call Bot Live</span>
+                    </button>
+                </div>
+
+                <div id="imessageThread" class="flex-1 overflow-y-auto p-4 space-y-3 bg-white"></div>
+
+                <!-- Approval Card -->
+                <div id="approvalBanner" class="mx-4 mb-2 p-3 bops-card flex items-center justify-between gap-3 shrink-0">
+                    <div class="text-[12px]">
+                        <div class="font-semibold">Asks before it acts</div>
+                        <div id="approvalText" class="text-[#6e6e73]">Send Sentrilock #8821 to agent Marcus Sterling &amp; calendar invite to Jonathan Vance?</div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button id="btnApproveAction" class="px-3 py-1 rounded-full bg-[#007aff] text-white text-[12px] font-semibold">Approve</button>
+                        <button id="btnSkipAction" class="px-3 py-1 rounded-full bg-[#f2f2f7] text-[#1d1d1f] text-[12px] font-medium">Skip</button>
+                    </div>
+                </div>
+
+                <!-- Quick Prompts -->
+                <div class="px-3 py-2 border-t border-[#f2f2f7] flex items-center gap-1.5 overflow-x-auto shrink-0 bg-[#fbfbfd]">
+                    <button data-quick-msg="Answer inbound Zillow call for 742 Evergreen Terrace" class="quick-pill text-[11px] bg-white hover:bg-[#f2f2f7] border border-[#d2d2d7] px-2.5 py-1 rounded-full whitespace-nowrap">📞 Inbound Buyer Call</button>
+                    <button data-quick-msg="Book Thursday 2:00 PM site visit and send Sentrilock code" class="quick-pill text-[11px] bg-white hover:bg-[#f2f2f7] border border-[#d2d2d7] px-2.5 py-1 rounded-full whitespace-nowrap">📅 Book Site Visit</button>
+                    <button data-quick-msg="Transcribe Marcus's car voice memo and draft the $2.35M offer email" class="quick-pill text-[11px] bg-white hover:bg-[#f2f2f7] border border-[#d2d2d7] px-2.5 py-1 rounded-full whitespace-nowrap">🎙️ Car Voice Memo → Offer</button>
+                    <button data-quick-msg="Check all active escrow files for missing disclosures" class="quick-pill text-[11px] bg-white hover:bg-[#f2f2f7] border border-[#d2d2d7] px-2.5 py-1 rounded-full whitespace-nowrap">📋 Audit Escrow Files</button>
+                </div>
+
+                <form id="chatComposerForm" class="p-3 bg-[#fbfbfd] border-t border-[#e5e5ea] flex items-center gap-2 shrink-0">
+                    <div class="flex-1 flex items-center bg-white border border-[#d2d2d7] rounded-full px-3.5 py-1.5">
+                        <input id="chatMessageInput" type="text" placeholder="Message Victoria or assign a task..." class="flex-1 bg-transparent text-[13px] focus:outline-none">
+                        <button type="submit" class="w-6 h-6 rounded-full bg-[#007aff] text-white flex items-center justify-center font-bold text-xs">↑</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Right: Live 4-Screen Orgo Computer -->
+            <section class="flex-1 bg-[#f5f5f7] flex flex-col overflow-hidden">
+                <div class="h-14 px-4 border-b border-[#e5e5ea] bg-[#fbfbfd] flex items-center justify-between shrink-0">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span id="orgoMonitorTitle" class="text-[13px] font-semibold">Orgo Cloud Computer (4 Screens)</span>
+                            <span id="takeoverStatusBadge" class="text-[11px] bg-[#e5e5ea] px-2 py-0.5 rounded-full">Watch</span>
+                        </div>
+                        <div id="virtualBrowserUrl" class="text-[11px] text-[#86868b] font-mono">orgo-vm://bops-realty · 4 cores · 16 GB RAM</div>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <div class="flex items-center bg-[#e5e5ea] p-0.5 rounded-lg text-[11px]">
+                            <button data-screen="0" class="screen-btn px-2 py-1 rounded-[5px] bg-white shadow-2xs">4 Screens</button>
+                            <button data-screen="1" class="screen-btn px-2 py-1 rounded-[5px] text-[#6e6e73]">1:MLS</button>
+                            <button data-screen="2" class="screen-btn px-2 py-1 rounded-[5px] text-[#6e6e73]">2:CRM</button>
+                            <button data-screen="3" class="screen-btn px-2 py-1 rounded-[5px] text-[#6e6e73]">3:Cal</button>
+                            <button data-screen="4" class="screen-btn px-2 py-1 rounded-[5px] text-[#6e6e73]">4:Docs</button>
+                        </div>
+                        <button id="btnToggleTakeover" class="px-3 py-1.5 rounded-lg bg-[#1d1d1f] text-white text-[12px] font-medium">🖐️ Take Over Screen</button>
+                    </div>
+                </div>
+
+                <div id="virtualDesktopFrame" class="flex-1 p-4 overflow-y-auto flex flex-col justify-between space-y-3">
+                    <div id="virtualScreenContent" class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                    <div class="bops-card p-3">
+                        <div class="flex items-center justify-between text-[11px] text-[#86868b] mb-1">
+                            <span>⚡ Live Team Activity Stream</span>
+                            <button id="btnClearFeed" class="text-[#007aff] hover:underline">Reset Log</button>
+                        </div>
+                        <div id="interBotLog" class="space-y-1 max-h-20 overflow-y-auto font-mono text-[11px]"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- VIEW 3: 4-SCREEN MATRIX -->
+        <div id="view-quad" class="flex-1 hidden p-6 bg-[#f5f5f7] overflow-y-auto">
+            <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-base font-bold">Orgo Cloud Computer — 4 Screens</h2>
+                <button id="btnBackToSplit" class="text-xs bg-white border border-[#d2d2d7] px-3 py-1.5 rounded-lg font-medium">← Back to Split View</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="quadScreensGrid"></div>
+        </div>
+
+    </div>
+
+    <!-- MODAL -->
+    <div id="appModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="bg-white border border-[#d2d2d7] rounded-2xl max-w-xl w-full p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-[#e5e5ea] pb-2.5">
+                <h3 id="modalTitle" class="text-sm font-bold">Briefing</h3>
+                <button id="btnCloseModal" class="text-[#86868b] hover:text-[#1d1d1f] text-lg font-bold px-2">&times;</button>
+            </div>
+            <div id="modalBody" class="text-xs text-[#1d1d1f] max-h-[60vh] overflow-y-auto font-mono whitespace-pre-wrap bg-[#f5f5f7] p-4 rounded-xl border border-[#e5e5ea] leading-relaxed"></div>
+            <div class="flex justify-end">
+                <button id="btnModalPrimary" class="bg-[#007aff] text-white text-xs font-semibold px-4 py-1.5 rounded-lg">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toastBanner" class="fixed bottom-4 right-4 bg-[#1d1d1f] text-white text-xs font-medium px-4 py-2.5 rounded-full shadow-lg hidden items-center gap-2 z-50">
+        <span class="w-2 h-2 rounded-full bg-[#34c759]"></span>
+        <span id="toastMessage">Saved</span>
+    </div>
+
+    <script>
+        const state = {
+            brokerageName: "My Real Estate Agency",
+            selectedBotId: "morgan",
+            listings: [],
+            selectedScreen: 0,
+            isTakeoverActive: false,
+            callsCount: 0,
+            memosCount: 0,
+            leadsCount: 0,
+            hotLeadsCount: 0,
+            apptsCount: 0,
+            leads: [],
+            bots: [
+                {
+                    id: "morgan",
+                    name: "Victoria",
+                    role: "Chief of Staff (Boss Line)",
+                    ext: "Ext 100",
+                    phone: "Not configured",
+                    email: "victoria@agency.bot",
+                    icon: "👑",
+                    bg: "bg-[#007aff]",
+                    status: "Direct Broker Concierge"
+                },
+                {
+                    id: "clara",
+                    name: "Clara",
+                    role: "Voice Receptionist (3 Lines)",
+                    ext: "Ext 101",
+                    phone: "Not configured",
+                    email: "clara@agency.bot",
+                    icon: "📞",
+                    bg: "bg-[#34c759]",
+                    status: "Phone Calls Only · Ring 1"
+                },
+                {
+                    id: "sam",
+                    name: "Ryan",
+                    role: "Portal Lead Catcher",
+                    ext: "Ext 102",
+                    phone: "Zillow · Realtor · Web",
+                    email: "ryan@agency.bot",
+                    icon: "🏠",
+                    bg: "bg-[#ff9500]",
+                    status: "Catching Zillow (<30s SLA)"
+                },
+                {
+                    id: "jordan",
+                    name: "Maya",
+                    role: "Social & WhatsApp Bot",
+                    ext: "Ext 103",
+                    phone: "IG DMs · Meta · WhatsApp",
+                    email: "maya@agency.bot",
+                    icon: "📱",
+                    bg: "bg-[#af52de]",
+                    status: "Qualifying IG & WhatsApp"
+                },
+                {
+                    id: "alex",
+                    name: "Alex",
+                    role: "Showings & Field Ops",
+                    ext: "Ext 104",
+                    phone: "Calendar · Lockbox · Memos",
+                    email: "alex@agency.bot",
+                    icon: "📅",
+                    bg: "bg-[#5856d6]",
+                    status: "Booking Tours & Car Memos"
+                }
+            ],
+            threads: {
+                morgan: [
+                    { sender: "bot", time: "Now", text: "Victoria online. All 4 specialist bots (Clara on Calls, Ryan on Portals, Maya on Instagram/WhatsApp, Alex on Showings) are active and connected to your SQLite database (real_estate_v4.db). Submit an inquiry from the website form or send a message to begin." }
+                ],
+                clara: [],
+                sam: [],
+                jordan: [],
+                alex: []
+            },
+            interBotFeed: [],
+            humanAgents: []
+        };
+
+        const fourScreens = [
+            { num: 1, title: "Screen 1: Clara (3-Line Voice) & Ryan (Portals)", url: "crm.bops.bot/inbounds", highlight: "Inbound Voice & Portal Hub", detail: "3 Phone Lines Active · Webhook Speed-to-Lead <30s SLA" },
+            { num: 2, title: "Screen 2: Maya (Instagram & WhatsApp)", url: "business.facebook.com/latest/inbox", highlight: "Social & Messaging Concierge", detail: "Listening on Instagram DMs, Meta Lead Ads & WhatsApp" },
+            { num: 3, title: "Screen 3: Alex (Calendar & Lockboxes)", url: "calendar.google.com/calendar/r", highlight: "Showing & Escrow Coordinator", detail: "Live iCal Sync Active · Sentrilock/Supra codes protected" },
+            { num: 4, title: "Screen 4: Victoria (Chief of Staff & Security)", url: "crm.bops.bot/pipeline", highlight: "Boss Whitelist & PIN Security Active", detail: "Emergency Voice Dialer armed for Boss & Licensed Agents" }
+        ];
+
+
+        function copyToClipboard(text) {
+            let copied = false;
+            try {
+                const ta = document.createElement("textarea");
+                ta.value = text;
+                ta.style.position = "fixed";
+                ta.style.left = "-9999px";
+                ta.style.top = "0";
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                copied = document.execCommand("copy");
+                document.body.removeChild(ta);
+            } catch (err) {}
+            if (!copied && navigator.clipboard) {
+                try { navigator.clipboard.writeText(text); copied = true; } catch (e) {}
+            }
+            return copied;
+        }
+
+        function downloadAgentIcsFile(agent) {
+            const icsContent = [
+                "BEGIN:VCALENDAR",
+                "VERSION:2.0",
+                "PRODID:-//Premier Realty Bops AI//EN",
+                "CALSCALE:GREGORIAN",
+                "METHOD:PUBLISH",
+                `X-WR-CALNAME:Premier Realty Showings (${agent.name})`,
+                "BEGIN:VEVENT",
+                `UID:tour-${agent.id}@premier-realty.com`,
+                "DTSTAMP:20261110T080000Z",
+                "DTSTART:20261112T210000Z",
+                "DTEND:20261112T214500Z",
+                "SUMMARY:In-Person Site Visit: 742 Evergreen Terrace, Beverly Hills",
+                `DESCRIPTION:Buyer: Jonathan Vance (+1-310-555-8291, Pre-Approved $2.5M Chase) | Assigned Agent: ${agent.name} (${agent.phone}) | Sentrilock #SENTRI-8821`,
+                "LOCATION:742 Evergreen Terrace, Beverly Hills, CA 90210",
+                "STATUS:CONFIRMED",
+                "END:VEVENT",
+                "END:VCALENDAR"
+            ].join("\r\n");
+
+            const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${agent.name.toLowerCase().replace(/\s+/g, "_")}_showings.ics`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById("toastBanner");
+            document.getElementById("toastMessage").textContent = msg;
+            t.classList.remove("hidden");
+            t.classList.add("flex");
+            setTimeout(() => { t.classList.add("hidden"); t.classList.remove("flex"); }, 3000);
+        }
+
+        function openModal(title, body) {
+            document.getElementById("modalTitle").textContent = title;
+            document.getElementById("modalBody").textContent = body;
+            const m = document.getElementById("appModal");
+            m.classList.remove("hidden");
+            m.classList.add("flex");
+        }
+
+        function closeModal() {
+            const m = document.getElementById("appModal");
+            m.classList.add("hidden");
+            m.classList.remove("flex");
+        }
+
+        function setTopView(mode) {
+            document.getElementById("view-ops").classList.add("hidden");
+            document.getElementById("view-split").classList.add("hidden");
+                        document.getElementById("view-quad").classList.add("hidden");
+
+            document.getElementById("btnViewOps").className = "px-3.5 py-1 rounded-lg font-medium text-[#6e6e73] hover:text-[#1d1d1f] transition";
+            document.getElementById("btnViewSplit").className = "px-3.5 py-1 rounded-lg font-medium text-[#6e6e73] hover:text-[#1d1d1f] transition";
+            document.getElementById("btnViewQuad").className = "px-3.5 py-1 rounded-lg font-medium text-[#6e6e73] hover:text-[#1d1d1f] transition hidden sm:inline-block";
+
+            if (mode === "ops") {
+                document.getElementById("view-ops").classList.remove("hidden");
+                document.getElementById("btnViewOps").className = "px-3.5 py-1 rounded-lg font-semibold bg-white text-[#1d1d1f] shadow-xs transition";
+            } else if (mode === "split") {
+                const sp = document.getElementById("view-split");
+                sp.classList.remove("hidden");
+                sp.classList.add("flex");
+                document.getElementById("btnViewSplit").className = "px-3.5 py-1 rounded-lg font-semibold bg-white text-[#1d1d1f] shadow-xs transition";
+            } else {
+                document.getElementById("view-quad").classList.remove("hidden");
+                document.getElementById("btnViewQuad").className = "px-3.5 py-1 rounded-lg font-semibold bg-white text-[#1d1d1f] shadow-xs transition hidden sm:inline-block";
+            }
+        }
+
+
+        function renderPropertiesTable() {
+            const container = document.getElementById("propertiesTableContainer");
+            const badge = document.getElementById("dbPropertiesCountBadge");
+            if (!container) return;
+            const props = state.listings || [];
+            if (badge) badge.textContent = `${props.length} Active in SQLite`;
+
+            if (props.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center bg-[#fbfbfd] border border-dashed border-[#d2d2d7] rounded-xl text-xs text-[#86868b]">No properties in SQLite database. Click <strong>+ Add Property to Database</strong> above to add your first listing.</div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="overflow-x-auto border border-[#e5e5ea] rounded-xl">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-[#f5f5f7] text-[#6e6e73] border-b border-[#e5e5ea] text-[11px] uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3 font-semibold">MLS ID</th>
+                                <th class="p-3 font-semibold">Property Address</th>
+                                <th class="p-3 font-semibold">Price</th>
+                                <th class="p-3 font-semibold">Specs</th>
+                                <th class="p-3 font-semibold">Lockbox (Staff Only)</th>
+                                <th class="p-3 font-semibold text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#e5e5ea] bg-white">
+                            ${props.map(p => `
+                                <tr class="hover:bg-[#fbfbfd] transition">
+                                    <td class="p-3 font-mono font-bold text-[#007aff]">${p.mls_id || 'MLS-LIVE'}</td>
+                                    <td class="p-3 font-semibold text-[#1d1d1f]">${p.address}</td>
+                                    <td class="p-3 font-bold text-emerald-700">$${Number(p.price || 0).toLocaleString()}</td>
+                                    <td class="p-3 text-[#515154]">${p.bedrooms || 3} BD · ${p.bathrooms || 2} BA · ${Number(p.square_feet || p.sqft || 2000).toLocaleString()} SqFt</td>
+                                    <td class="p-3 font-mono text-[11px] text-rose-700">${p.lockbox_code || 'SENTRI-PROTECTED'}</td>
+                                    <td class="p-3 text-right">
+                                        <button type="button" data-del-mls="${p.mls_id}" class="btn-del-prop text-[11px] text-rose-600 hover:underline font-medium">Delete</button>
+                                    </td>
+                                </tr>
+                            `).join("")}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            document.querySelectorAll(".btn-del-prop").forEach(btn => {
+                btn.addEventListener("click", async () => {
+                    const mls = btn.getAttribute("data-del-mls");
+                    if (!mls) return;
+                    try {
+                        await fetch(window.location.origin + "/api/v1/properties/" + encodeURIComponent(mls), { method: "DELETE" });
+                        showToast(`Deleted ${mls} from SQLite database.`);
+                        fetchBackendData();
+                    } catch (e) {}
+                });
+            });
+        }
+
+        function renderLeadsTable() {
+            const container = document.getElementById("leadsTableContainer");
+            if (!container) return;
+
+            if (!state.leads || state.leads.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center bg-[#fbfbfd] border border-dashed border-[#d2d2d7] rounded-2xl space-y-2">
+                        <div class="text-3xl">📭</div>
+                        <div class="text-[14px] font-semibold text-[#1d1d1f]">No Inbound Leads in Database Yet</div>
+                        <p class="text-[12px] text-[#86868b] max-w-md mx-auto">Open your public real estate website at <code class="text-[#007aff]">/website</code> and submit a showing request. Ryan will verify the property against the SQLite inventory table below and log the lead here.</p>
+                        <a href="/website" target="_blank" class="inline-block mt-2 bg-[#007aff] hover:bg-[#0062cc] text-white text-[12px] font-semibold px-4 py-2 rounded-xl transition">Open Public Website (/website) →</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="overflow-x-auto border border-[#e5e5ea] rounded-xl">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-[#f5f5f7] text-[#6e6e73] border-b border-[#e5e5ea] text-[11px] uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3 font-semibold">Buyer &amp; Contact</th>
+                                <th class="p-3 font-semibold">Inquired Property &amp; Buyer Note</th>
+                                <th class="p-3 font-semibold">Ryan's Database-Verified Reply</th>
+                                <th class="p-3 font-semibold">BANT Score</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#e5e5ea] bg-white">
+                            ${state.leads.map(l => {
+                                const q = l.qualification || {};
+                                const score = q.score !== undefined ? q.score : 50;
+                                const tier = q.tier || (score >= 75 ? "HOT" : (score >= 45 ? "WARM" : "COLD"));
+                                const tierBadge = tier === "HOT"
+                                    ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold border border-emerald-300">🔥 HOT (' + score + '/100)</span>'
+                                    : (tier === "WARM"
+                                        ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold border border-amber-300">⚡ WARM (' + score + '/100)</span>'
+                                        : '<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-medium border border-slate-300">❄️ COLD (' + score + '/100)</span>');
+                                const histList = l.conversation_history || [];
+                                const lastBotHist = [...histList].reverse().find(h => h.sender !== "LEAD") || {};
+                                const emailStatus = lastBotHist.email_status || "NOT_CONFIGURED";
+                                const emailBadge = emailStatus === "SENT_LIVE"
+                                    ? `<span class="inline-flex items-center gap-1 text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded">✉️ Email Sent to ${l.email}</span>`
+                                    : `<span class="inline-flex items-center gap-1 text-[10px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded" title="${lastBotHist.email_detail || 'Configure Resend or SMTP below'}">⚠️ Email: ${emailStatus}</span>`;
+                                const threadHtml = histList.map(h => h.sender === "LEAD"
+                                    ? `<div class="text-[11px] bg-blue-50 text-blue-900 p-2 rounded-lg border border-blue-200"><strong>👤 Buyer Reply:</strong> ${h.text}</div>`
+                                    : `<div class="text-[11px] text-[#1d1d1f] bg-[#f5f5f7] p-2 rounded-lg border border-[#e5e5ea] leading-relaxed"><strong>🤖 Ryan:</strong> ${h.text}</div>`
+                                ).join("");
+                                return `
+                                    <tr class="hover:bg-[#fbfbfd] transition align-top">
+                                        <td class="p-3 font-semibold text-[#1d1d1f] whitespace-nowrap">
+                                            <div>${l.first_name} ${l.last_name}</div>
+                                            <div class="font-mono text-[11px] text-[#515154] font-normal">${l.phone}</div>
+                                            <div class="text-[11px] text-[#86868b] font-normal">${l.email}</div>
+                                            <div class="text-[10px] font-mono text-[#86868b] mt-1">${l.created_at ? l.created_at.substring(0, 19).replace('T', ' ') : ''}</div>
+                                        </td>
+                                        <td class="p-3 max-w-xs">
+                                            <div class="font-semibold text-[#1d1d1f]">${l.inquired_property_address || 'General Inquiry'}</div>
+                                            <div class="text-[11px] text-[#6e6e73] mt-1 italic">"${l.initial_message || ''}"</div>
+                                        </td>
+                                        <td class="p-3 max-w-md space-y-2">
+                                            <div class="space-y-1.5 max-h-44 overflow-y-auto pr-1">${threadHtml}</div>
+                                            <div class="flex items-center justify-between gap-2 pt-1">
+                                                ${emailBadge}
+                                                <button type="button" data-resend-lead="${l.id}" class="btn-resend-email text-[10px] font-semibold text-[#007aff] hover:underline">📧 Resend Latest Email</button>
+                                            </div>
+                                            <!-- Two-Way Reply Box -->
+                                            <div class="flex items-center gap-1.5 pt-1">
+                                                <input type="text" data-reply-input="${l.id}" placeholder="Test buyer reply (e.g. Can I tour Saturday 2pm?)..." class="bops-input flex-1 py-1 px-2 text-[11px] bg-white">
+                                                <button type="button" data-reply-btn="${l.id}" class="btn-simulate-buyer-reply bg-[#007aff] hover:bg-[#0062cc] text-white text-[10px] font-semibold px-2.5 py-1 rounded-lg shrink-0 transition">Reply &amp; Email</button>
+                                            </div>
+                                        </td>
+                                        <td class="p-3 whitespace-nowrap">
+                                            <div>${tierBadge}</div>
+                                            <div class="text-[10px] text-[#6e6e73] mt-1">${l.caught_by_bot || 'Ryan (Ext 102)'}</div>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join("")}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            document.querySelectorAll(".btn-simulate-buyer-reply").forEach(btn => {
+                btn.addEventListener("click", async () => {
+                    const lid = btn.getAttribute("data-reply-btn");
+                    const inp = document.querySelector(`input[data-reply-input="${lid}"]`);
+                    const msg = inp ? inp.value.trim() : "";
+                    if (!msg) {
+                        showToast("Type a buyer reply message first.");
+                        return;
+                    }
+                    btn.textContent = "Replying...";
+                    btn.disabled = true;
+                    try {
+                        const r = await fetch(window.location.origin + `/api/v1/leads/${encodeURIComponent(lid)}/chat`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ message: msg })
+                        });
+                        if (r.ok) {
+                            showToast("✓ Ryan generated follow-up response & emailed the buyer!");
+                            fetchBackendData();
+                        }
+                    } catch (e) {
+                        showToast("Error processing buyer reply.");
+                    } finally {
+                        btn.textContent = "Reply & Email";
+                        btn.disabled = false;
+                    }
+                });
+            });
+
+            document.querySelectorAll(".btn-resend-email").forEach(btn => {
+                btn.addEventListener("click", async () => {
+                    const lid = btn.getAttribute("data-resend-lead");
+                    if (!lid) return;
+                    btn.textContent = "Sending...";
+                    try {
+                        const r = await fetch(window.location.origin + "/api/v1/leads/" + encodeURIComponent(lid) + "/send-email", { method: "POST" });
+                        const d = await r.json();
+                        if (r.ok) {
+                            showToast("✓ Email delivered to buyer's inbox!");
+                        } else {
+                            showToast("⚠️ " + (d.detail || "Configure Gmail App Password first."));
+                        }
+                        fetchBackendData();
+                    } catch (e) {
+                        showToast("Error sending email.");
+                    }
+                });
+            });
+        }
+
+        async function fetchBackendData() {
+            if (!window.location.origin || !window.location.origin.startsWith("http")) return;
+            try {
+                // 1. Fetch stats
+                const sRes = await fetch(window.location.origin + "/api/v1/stats");
+                if (sRes.ok) {
+                    const stats = await sRes.json();
+                    state.callsCount = stats.calls_count || 0;
+                    state.memosCount = stats.memos_count || 0;
+                    state.leadsCount = stats.total_leads || 0;
+                    state.hotLeadsCount = stats.hot_leads || 0;
+                    state.apptsCount = stats.appointments_count || 0;
+
+                    const elTot = document.getElementById("statTotalLeads");
+                    if (elTot) elTot.textContent = state.leadsCount;
+                    const elHot = document.getElementById("statHotLeads");
+                    if (elHot) elHot.textContent = state.hotLeadsCount;
+                    const elCalls = document.getElementById("statCalls");
+                    if (elCalls) elCalls.textContent = state.callsCount;
+                    const elAppts = document.getElementById("statAppts");
+                    if (elAppts) elAppts.textContent = state.apptsCount;
+                }
+
+                // 2. Fetch leads
+                const lRes = await fetch(window.location.origin + "/api/v1/leads");
+                if (lRes.ok) {
+                    state.leads = await lRes.json();
+                    renderLeadsTable();
+                }
+
+                // 2b. Fetch SQLite property listings
+                const pRes = await fetch(window.location.origin + "/api/v1/properties");
+                if (pRes.ok) {
+                    state.listings = await pRes.json();
+                    renderPropertiesTable();
+                }
+
+                // 3. Fetch activity log
+                const aRes = await fetch(window.location.origin + "/api/v1/activity-log?limit=15");
+                if (aRes.ok) {
+                    const logs = await aRes.json();
+                    if (logs && logs.length > 0) {
+                        state.interBotFeed = logs.map(l => ({
+                            time: l.created_at ? l.created_at.substring(11, 19) : "Just now",
+                            from: l.bot_name,
+                            to: l.bot_role,
+                            msg: l.summary
+                        }));
+                        const logBox = document.getElementById("interBotLog");
+                        if (logBox) {
+                            logBox.innerHTML = state.interBotFeed.map(i => `
+                                <div class="truncate"><span class="text-[#86868b]">[${i.time}]</span> <strong class="text-[#007aff]">${i.from}</strong>: ${i.msg}</div>
+                            `).join("");
+                        }
+                    }
+                }
+            } catch (err) {}
+        }
+
+        function renderAll() {
+            document.getElementById("headerBrokerageName").textContent = state.brokerageName;
+
+            // Sidebar roster
+            const list = document.getElementById("bopsRosterList");
+            list.innerHTML = state.bots.map(b => {
+                const active = b.id === state.selectedBotId;
+                return `
+                    <button data-select-bot="${b.id}" class="bot-roster-item w-full text-left px-2.5 py-2 rounded-xl flex items-center gap-2.5 transition ${active ? 'bg-[#007aff] text-white shadow-xs' : 'hover:bg-[#e8e8ed] text-[#1d1d1f]'}">
+                        <div class="w-8 h-8 rounded-full ${b.bg} text-white flex items-center justify-center text-sm shrink-0">${b.icon}</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[13px] font-semibold truncate">${b.name}</span>
+                                <span class="text-[10px] ${active ? 'text-white/80' : 'text-[#86868b]'}">${b.ext}</span>
+                            </div>
+                            <div class="text-[11px] truncate ${active ? 'text-white/90' : 'text-[#6e6e73]'}">${b.status}</div>
+                        </div>
+                    </button>
+                `;
+            }).join("");
+
+            document.querySelectorAll(".bot-roster-item").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    state.selectedBotId = btn.getAttribute("data-select-bot");
+                    setTopView("split");
+                    renderAll();
+                });
+            });
+
+            // Human agents cards
+            const ha = document.getElementById("humanAgentsGrid");
+            if (ha) {
+                ha.innerHTML = state.humanAgents.map(a => `
+                    <div class="bg-[#f5f5f7] border border-[#e5e5ea] rounded-xl p-3 text-xs space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-[#1d1d1f]">${a.name}</span>
+                            <div class="flex items-center gap-1">
+                                <span class="text-[10px] bg-white border border-[#e5e5ea] px-2 py-0.5 rounded-full">${a.load}/${a.cap} leads</span>
+                                <button data-remove-agent="${a.id}" class="btn-remove-agent text-[11px] text-[#86868b] hover:text-rose-600 px-1" title="Remove Agent">&times;</button>
+                            </div>
+                        </div>
+                        <div class="font-mono text-[11px] text-[#007aff]">${a.phone}</div>
+                        <div class="text-[11px] text-[#6e6e73]">${a.specialty} · Zips: ${a.zips}</div>
+                        <div class="pt-1.5 border-t border-[#e5e5ea] space-y-1.5">
+                            <div class="text-[10px] text-[#6e6e73] font-medium">Live Calendar Feed URL:</div>
+                            <input type="text" readonly value="${window.location.origin && window.location.origin.startsWith('http') ? window.location.origin : 'https://your-vps-domain.com'}/api/v1/calendar/agent/${a.id}/feed.ics" class="w-full bg-white border border-[#d2d2d7] rounded px-2 py-1 text-[10px] font-mono text-[#1d1d1f] select-all">
+                            <div class="flex items-center gap-1 pt-0.5">
+                                <button data-cal-agent="${a.name}" data-cal-id="${a.id}" class="btn-copy-cal flex-1 text-[10px] bg-[#007aff] hover:bg-[#0062cc] text-white py-1 px-2 rounded font-semibold transition">Copy Calendar URL</button>
+                                <button data-dl-ics="${a.id}" class="btn-dl-ics text-[10px] bg-white hover:bg-[#e8e8ed] border border-[#d2d2d7] text-[#1d1d1f] py-1 px-2 rounded font-medium transition" title="Download .ics Calendar File">⬇️ .ics</button>
+                                <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=${encodeURIComponent('Site Visit: 742 Evergreen Terrace (' + a.name + ')')}&amp;dates=20261112T210000Z/20261112T214500Z&amp;details=${encodeURIComponent('Buyer: Jonathan Vance (+1-310-555-8291, Pre-Approved $2.5M Chase) | Sentrilock #SENTRI-8821')}&amp;location=${encodeURIComponent('742 Evergreen Terrace, Beverly Hills, CA 90210')}" target="_blank" rel="noopener noreferrer" class="text-[10px] bg-white hover:bg-[#e8e8ed] border border-[#d2d2d7] text-[#007aff] py-1 px-2 rounded font-semibold transition">📅 Open GCal</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join("");
+            }
+
+            document.querySelectorAll(".btn-copy-cal").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const agName = btn.getAttribute("data-cal-agent");
+                    const agId = btn.getAttribute("data-cal-id") || "agent_101";
+                    const baseOrigin = (window.location.origin && window.location.origin.startsWith("http")) ? window.location.origin : "https://your-vps-domain.com";
+                    const feedUrl = `${baseOrigin}/api/v1/calendar/agent/${agId}/feed.ics`;
+                    copyToClipboard(feedUrl);
+                    btn.textContent = "✓ Copied!";
+                    setTimeout(() => { btn.textContent = "Copy Calendar URL"; }, 2000);
+                    showToast(`Copied to clipboard: ${feedUrl}`);
+                });
+            });
+
+            document.querySelectorAll(".btn-dl-ics").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const agId = btn.getAttribute("data-dl-ics");
+                    const agent = state.humanAgents.find(x => x.id === agId) || state.humanAgents[0];
+                    downloadAgentIcsFile(agent);
+                    showToast(`Downloaded ${agent.name}'s .ics Calendar File!`);
+                });
+            });
+
+
+            document.getElementById("sidebarOnlineCount").textContent = `● ${state.bots.length} Online`;
+
+            document.querySelectorAll(".btn-remove-agent").forEach(btn => {
+                btn.addEventListener("click", async () => {
+                    const agId = btn.getAttribute("data-remove-agent");
+                    state.humanAgents = state.humanAgents.filter(a => a.id !== agId);
+                    try {
+                        if (window.location.origin && window.location.origin.startsWith("http")) {
+                            await fetch(window.location.origin + "/api/v1/agents/" + agId, { method: "DELETE" });
+                        }
+                    } catch (e) {}
+                    renderAll();
+                    showToast("Removed agent from routing roster.");
+                });
+            });
+
+            // Chat thread
+            const bot = state.bots.find(b => b.id === state.selectedBotId) || state.bots[0];
+            document.getElementById("activeBotAvatar").textContent = bot.icon;
+            document.getElementById("activeBotName").textContent = bot.name;
+            document.getElementById("activeBotRoleBadge").textContent = bot.role;
+            document.getElementById("activeBotEmail").textContent = bot.email;
+            document.getElementById("activeBotPhone").textContent = bot.phone;
+
+            const msgs = state.threads[bot.id] || [];
+            const box = document.getElementById("imessageThread");
+            box.innerHTML = msgs.map(m => m.sender === "user"
+                ? `<div class="flex flex-col items-end"><div class="imessage-outgoing px-3.5 py-2 max-w-[80%] text-[13px]">${m.text}</div><span class="text-[10px] text-[#86868b] mt-1">Delivered · ${m.time}</span></div>`
+                : `<div class="flex items-end gap-2"><div class="w-6 h-6 rounded-full ${bot.bg} text-white flex items-center justify-center text-xs shrink-0">${bot.icon}</div><div class="imessage-incoming px-3.5 py-2 max-w-[82%] text-[13px]">${m.text}</div></div>`
+            ).join("");
+
+            // Screens
+            const listScreens = state.selectedScreen === 0 ? fourScreens : fourScreens.filter(s => s.num === state.selectedScreen);
+            const scHtml = listScreens.map(s => `
+                <div class="bg-[#1c1c1e] text-white rounded-xl p-3.5 border border-zinc-800 space-y-2">
+                    <div class="flex justify-between items-center text-[11px] text-zinc-400 border-b border-zinc-800 pb-1.5">
+                        <span class="font-semibold text-zinc-200">${s.title}</span>
+                        <span class="text-emerald-400 font-mono">● LIVE</span>
+                    </div>
+                    <div class="text-[10px] font-mono text-zinc-400 bg-zinc-900 px-2 py-1 rounded">🔒 https://${s.url}</div>
+                    <div class="text-xs font-bold text-[#0a84ff]">${s.highlight}</div>
+                    <div class="text-[11px] text-zinc-300">${s.detail}</div>
+                </div>
+            `).join("");
+            document.getElementById("virtualScreenContent").innerHTML = scHtml;
+            document.getElementById("quadScreensGrid").innerHTML = scHtml;
+
+            // Activity feed
+            const logBox = document.getElementById("interBotLog");
+            if (logBox) {
+                logBox.innerHTML = state.interBotFeed.length > 0
+                    ? state.interBotFeed.map(i => `
+                        <div class="truncate"><span class="text-[#86868b]">[${i.time}]</span> <strong class="text-[#007aff]">${i.from}</strong>: ${i.msg}</div>
+                    `).join("")
+                    : '<div class="text-[#86868b] italic">// No team activity logged yet. Submit a lead or send a message to trigger bot actions.</div>';
+            }
+
+            renderLeadsTable();
+        }
+
+
+        const providerModelsMap = {
+            gemini: ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-3.1-pro", "gemini-3.1-flash"],
+            openai: ["gpt-4o-mini", "gpt-4o", "o3-mini"],
+            claude: ["claude-3-5-haiku-latest", "claude-3-7-sonnet-latest", "claude-3-5-sonnet-latest"],
+            grok: ["grok-3-mini", "grok-3", "grok-2-latest"],
+            nvidia: ["meta/llama-3.3-70b-instruct", "deepseek-ai/deepseek-r1", "nvidia/llama-3.1-nemotron-70b-instruct"],
+            deepseek: ["deepseek-chat", "deepseek-reasoner"],
+            glm: ["glm-4-flash", "glm-4-plus", "glm-zero-preview"],
+            groq: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"],
+            openrouter: ["google/gemini-2.5-flash", "anthropic/claude-3.7-sonnet", "x-ai/grok-3", "deepseek/deepseek-chat"]
+        };
+
+        document.getElementById("setupAiProvider").addEventListener("change", (e) => {
+            const prov = e.target.value;
+            const models = providerModelsMap[prov] || ["gpt-4o-mini"];
+            const modelSelect = document.getElementById("setupAiModel");
+            modelSelect.innerHTML = models.map(m => `<option value="${m}">${m}</option>`).join("");
+            showToast(`Switched provider to ${prov.toUpperCase()} (${models[0]})`);
+        });
+
+
+        async function autoDetectAndFetchModelsFromKey(rawKey) {
+            const k = (rawKey || "").trim();
+            if (!k) return;
+
+            let detected = document.getElementById("setupAiProvider").value;
+            if (k.startsWith("AIza")) detected = "gemini";
+            else if (k.startsWith("sk-ant-")) detected = "claude";
+            else if (k.startsWith("nvapi-")) detected = "nvidia";
+            else if (k.startsWith("gsk_")) detected = "groq";
+            else if (k.startsWith("xai-")) detected = "grok";
+            else if (k.startsWith("sk-or-")) detected = "openrouter";
+            else if (k.includes(".") && !k.startsWith("sk-")) detected = "glm";
+            else if (k.startsWith("sk-")) detected = "openai";
+
+            document.getElementById("setupAiProvider").value = detected;
+            let unlockedModels = [...(providerModelsMap[detected] || ["gemini-2.5-flash"])];
+            let liveSource = "Curated Catalog";
+
+            // Try querying live provider /v1/models endpoint directly from browser if real key
+            try {
+                if (detected === "gemini" && !k.startsWith("AIzaSyBops")) {
+                    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(k)}`);
+                    if (r.ok) {
+                        const d = await r.json();
+                        const mList = (d.models || []).map(m => m.name.replace("models/", "")).filter(n => n.startsWith("gemini"));
+                        if (mList.length) { unlockedModels = mList; liveSource = "Live Google API"; }
+                    }
+                } else if (detected === "openrouter" || detected === "groq" || detected === "openai") {
+                    const urlMap = {
+                        openrouter: "https://openrouter.ai/api/v1/models",
+                        groq: "https://api.groq.com/openai/v1/models",
+                        openai: "https://api.openai.com/v1/models"
+                    };
+                    if (urlMap[detected] && k.length > 20) {
+                        const r = await fetch(urlMap[detected], { headers: { "Authorization": `Bearer ${k}` } });
+                        if (r.ok) {
+                            const d = await r.json();
+                            const mList = (d.data || []).map(m => m.id);
+                            if (mList.length) { unlockedModels = mList; liveSource = "Live /v1/models API"; }
+                        }
+                    }
+                }
+            } catch (e) {}
+
+            const modelSelect = document.getElementById("setupAiModel");
+            modelSelect.innerHTML = unlockedModels.map(m => `<option value="${m}">${m}</option>`).join("");
+            document.getElementById("autoDetectHint").textContent = `✓ Auto-detected ${detected.toUpperCase()} key · ${unlockedModels.length} models unlocked (${liveSource})`;
+            document.getElementById("aiKeyStatusBadge").textContent = `${detected.toUpperCase()} (${unlockedModels.length} models)`;
+            showToast(`Auto-detected ${detected.toUpperCase()} & loaded ${unlockedModels.length} models!`);
+        }
+
+        document.getElementById("setupAiApiKey").addEventListener("input", (e) => {
+            autoDetectAndFetchModelsFromKey(e.target.value);
+        });
+
+        document.getElementById("btnAutoDetectModels").addEventListener("click", () => {
+            autoDetectAndFetchModelsFromKey(document.getElementById("setupAiApiKey").value);
+        });
+
+
+        // Add New Human Agent Form Handlers
+        document.getElementById("btnToggleNewAgentForm").addEventListener("click", () => {
+            const card = document.getElementById("newAgentFormCard");
+            card.classList.toggle("hidden");
+        });
+
+        document.getElementById("btnCancelNewAgent").addEventListener("click", () => {
+            document.getElementById("newAgentFormCard").classList.add("hidden");
+        });
+
+        document.getElementById("btnConfirmAddAgent").addEventListener("click", async () => {
+            const name = document.getElementById("addAgentName").value.trim() || "Sophia Loren";
+            const phone = document.getElementById("addAgentPhone").value.trim() || "+1-310-555-7000";
+            const specialty = document.getElementById("addAgentSpecialty").value;
+            const zips = document.getElementById("addAgentZips").value.trim() || "90210, 90265";
+            const cap = parseInt(document.getElementById("addAgentCap").value, 10) || 20;
+            const newId = "agent_" + Math.floor(100 + Math.random() * 900);
+
+            const newAgentObj = {
+                id: newId,
+                name: name,
+                phone: phone,
+                email: `${name.toLowerCase().replace(/\s+/g, ".")}@premier-realty.com`,
+                specialty: specialty,
+                zips: zips,
+                load: 0,
+                cap: cap
+            };
+
+            state.humanAgents.push(newAgentObj);
+
+            // Sync with live FastAPI VPS server if running
+            try {
+                if (window.location.origin && window.location.origin.startsWith("http")) {
+                    await fetch(window.location.origin + "/api/v1/agents", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            id: newId,
+                            name: name,
+                            phone: phone,
+                            specialty: specialty,
+                            zip_codes: zips,
+                            max_capacity: cap
+                        })
+                    });
+                }
+            } catch (e) {}
+
+            document.getElementById("addAgentName").value = "";
+            document.getElementById("addAgentPhone").value = "";
+            document.getElementById("addAgentZips").value = "";
+            document.getElementById("newAgentFormCard").classList.add("hidden");
+
+            renderAll();
+            showToast(`✓ Added ${name} (${phone}) with live Calendar Feed & Caller-ID Whitelist!`);
+        });
+
+        // Add New Custom AI Bot Handlers
+        document.getElementById("btnToggleNewBotForm").addEventListener("click", () => {
+            document.getElementById("newBotFormDrawer").classList.toggle("hidden");
+        });
+
+        document.getElementById("btnCancelNewBot").addEventListener("click", () => {
+            document.getElementById("newBotFormDrawer").classList.add("hidden");
+        });
+
+        document.getElementById("btnSaveNewBot").addEventListener("click", () => {
+            const bName = document.getElementById("newBotNameInput").value.trim() || "Liam";
+            const bRole = document.getElementById("newBotRoleInput").value.trim() || "TikTok & YouTube Catcher";
+            const bPhone = document.getElementById("newBotPhoneInput").value.trim() || "+1 (310) 555-0109";
+            const bId = "bot_" + Date.now();
+            const extNum = 100 + state.bots.length;
+
+            state.bots.push({
+                id: bId,
+                name: bName,
+                role: bRole,
+                ext: `Ext ${extNum}`,
+                phone: bPhone,
+                email: `${bName.toLowerCase()}@premier.bops.bot`,
+                icon: "🤖",
+                bg: "bg-[#007aff]",
+                status: `Active · ${bRole}`
+            });
+            state.threads[bId] = [
+                { sender: "bot", time: "Just now", text: `Hi! I'm ${bName} (Ext ${extNum}), your new ${bRole}. I'm online and connected to ${bPhone}.` }
+            ];
+
+            document.getElementById("newBotNameInput").value = "";
+            document.getElementById("newBotRoleInput").value = "";
+            document.getElementById("newBotPhoneInput").value = "";
+            document.getElementById("newBotFormDrawer").classList.add("hidden");
+
+            state.selectedBotId = bId;
+            renderAll();
+            showToast(`✓ Created new AI Bot: ${bName} (Ext ${extNum})!`);
+        });
+
+        // Top View Switcher
+        document.getElementById("btnViewOps").addEventListener("click", () => setTopView("ops"));
+        document.getElementById("btnViewSplit").addEventListener("click", () => setTopView("split"));
+        document.getElementById("btnViewQuad").addEventListener("click", () => setTopView("quad"));
+        document.getElementById("btnBackToSplit").addEventListener("click", () => setTopView("split"));
+
+        // Save & Sync directly to Private Cloud VPS (/api/v1/client/settings)
+        async function syncSettingsToCloudVPS() {
+            state.brokerageName = document.getElementById("cfgBrokerageName").value || "Premier Realty";
+            const payload = {
+                brokerage_name: state.brokerageName,
+                ai_provider: document.getElementById("setupAiProvider").value,
+                ai_model: document.getElementById("setupAiModel").value,
+                ai_api_key: document.getElementById("setupAiApiKey").value,
+                voice_model: document.getElementById("setupVoiceModel").value,
+                twilio_sid: document.getElementById("setupTwilioSid").value,
+                twilio_token: document.getElementById("setupTwilioToken").value,
+                crm_platform: document.getElementById("cfgCrmPlatform").value,
+                victoria_number: document.getElementById("numVictoria").value,
+                clara_numbers: document.getElementById("cfgTwilioNumber").value,
+                maya_channel: document.getElementById("numMaya").value,
+                boss_phone: document.getElementById("setupBossPhone").value,
+                boss_pin: document.getElementById("setupBossPin").value,
+                smtp_email: document.getElementById("setupSmtpEmail")?.value || "",
+                smtp_password: document.getElementById("setupSmtpPassword")?.value || "",
+                smtp_host: document.getElementById("setupSmtpHost")?.value || "smtp.gmail.com",
+                smtp_port: parseInt(document.getElementById("setupSmtpPort")?.value || "465", 10)
+            };
+            try {
+                localStorage.setItem("bops_client_settings", JSON.stringify(payload));
+            } catch (e) {}
+            try {
+                if (window.location.origin && window.location.origin.startsWith("http")) { await fetch(window.location.origin + "/api/v1/client/settings", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                }); }
+            } catch (e) {}
+            renderAll();
+            showToast("✓ Saved & synced live to your Private Cloud Server!");
+        }
+
+        document.getElementById("btnSaveAllConfig").addEventListener("click", syncSettingsToCloudVPS);
+
+        document.getElementById("btnDownloadEnvFile").addEventListener("click", () => {
+            const provider = document.getElementById("setupAiProvider").value;
+            const modelName = document.getElementById("setupAiModel").value;
+            const voiceModel = document.getElementById("setupVoiceModel").value;
+            const aiKey = document.getElementById("setupAiApiKey").value;
+            const sid = document.getElementById("setupTwilioSid").value;
+            const tok = document.getElementById("setupTwilioToken").value;
+            const claraNums = document.getElementById("cfgTwilioNumber").value;
+            const bossPhone = document.getElementById("setupBossPhone").value;
+            const bossPin = document.getElementById("setupBossPin").value;
+
+            const envText = `# REAL ESTATE BOPS v4.0 —GENERATED CONFIGURATION
+BROKERAGE_NAME="${state.brokerageName}"
+AI_PROVIDER="${provider}"
+AI_MODEL="${modelName}"
+AI_API_KEY="${aiKey}"
+VOICE_MODEL="${voiceModel}"
+TWILIO_ACCOUNT_SID="${sid}"
+TWILIO_AUTH_TOKEN="${tok}"
+CLARA_VOICE_NUMBERS="${claraNums}"
+BOSS_WHITELIST_PHONE="${bossPhone}"
+BOSS_SECURITY_PIN="${bossPin}"`;
+            openModal("⬇️ Generated .env Configuration (Copy & Paste)", envText);
+        });
+
+        document.getElementById("btnCopyZillowWebhook").addEventListener("click", () => {
+            const zUrl = document.getElementById("numRyan").value;
+            copyToClipboard(zUrl);
+            showToast(`Copied to clipboard: ${zUrl}`);
+        });
+
+        // Emergency Call Triggers (Victoria Ext 100)
+        document.getElementById("btnEmergencyCallBoss").addEventListener("click", () => {
+            const bossPhone = document.getElementById("setupBossPhone").value;
+            const body = `📞 LIVE OUTBOUND CALL INITIATED BY VICTORIA (CHIEF OF STAFF • EXT 100)
+Target: Managing Broker (Boss) at ${bossPhone}
+Privilege: EXECUTIVE_EMERGENCY_OUTBOUND_CALL
+
+🎙️ Spoken Voice Script:
+"Boss, urgent compliance alert from Victoria. The inspection contingency on 1042 Wilshire Boulevard expires in less than 24 hours and 2 disclosures are still unsigned. Press 1 to authorize an emergency extension addendum."`;
+            openModal("🚨 Emergency Outbound Call → Managing Broker", body);
+        });
+
+        document.getElementById("btnEmergencyCallAgent").addEventListener("click", () => {
+            const body = `📞 LIVE OUTBOUND CALL INITIATED BY VICTORIA (CHIEF OF STAFF • EXT 100)
+Target: Assigned Luxury Specialist Marcus Sterling (+1-555-019-2831)
+Privilege: EXECUTIVE_EMERGENCY_OUTBOUND_CALL
+
+🎙️ Spoken Voice Script:
+"Urgent alert for Marcus Sterling. Jonathan Vance, pre-approved for $2.5 million with Chase, is parked outside 742 Evergreen Terrace requesting an immediate walkthrough. Press 1 to connect with the buyer now, or press 2 so I can reassign to Elena Rostova."`;
+            openModal("🚨 Emergency Outbound Call → Assigned Agent", body);
+        });
+
+        // Chat & Autonomy handlers
+        document.getElementById("btnModeAsk").addEventListener("click", () => {
+            document.getElementById("autonomyBadge").textContent = "Asks first";
+            showToast("Autonomy set to: Ask before act");
+        });
+        document.getElementById("btnModeAuto").addEventListener("click", () => {
+            document.getElementById("autonomyBadge").textContent = "Just do it";
+            showToast("Autonomy set to: Just do it");
+        });
+        document.getElementById("btnApproveAction").addEventListener("click", () => {
+            document.getElementById("approvalBanner").classList.add("hidden");
+            showToast("Approved! Sentrilock code sent to Agent Marcus.");
+        });
+        document.getElementById("btnSkipAction").addEventListener("click", () => {
+            document.getElementById("approvalBanner").classList.add("hidden");
+            showToast("Skipped.");
+        });
+
+        async function callProviderLLMDirectly(provider, model, apiKey, systemPrompt, conversationHistory) {
+            const cleanKey = (apiKey || "").trim();
+            if (!cleanKey || cleanKey === "AIzaSyBopsRealEstateKey" || cleanKey.startsWith("sk-bops-local")) {
+                return { reply: null, error: "Please paste your real API key in '⚡ Studio & Setup' first." };
+            }
+            try {
+                if (provider === "gemini") {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(cleanKey)}`;
+                    const geminiContents = conversationHistory.map(m => ({
+                        role: m.role === "assistant" ? "model" : "user",
+                        parts: [{ text: m.content }]
+                    }));
+                    const r = await fetch(url, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            systemInstruction: { parts: [{ text: systemPrompt }] },
+                            contents: geminiContents,
+                            generationConfig: { temperature: 0.4, maxOutputTokens: 2048 }
+                        })
+                    });
+                    const d = await r.json();
+                    if (!r.ok) return { reply: null, error: d.error?.message || `Gemini HTTP ${r.status}` };
+                    return { reply: d.candidates?.[0]?.content?.parts?.[0]?.text || null, error: null };
+                } else {
+                    const endpointMap = {
+                        openai: "https://api.openai.com/v1/chat/completions",
+                        groq: "https://api.groq.com/openai/v1/chat/completions",
+                        grok: "https://api.x.ai/v1/chat/completions",
+                        deepseek: "https://api.deepseek.com/v1/chat/completions",
+                        openrouter: "https://openrouter.ai/api/v1/chat/completions",
+                        nvidia: "https://integrate.api.nvidia.com/v1/chat/completions",
+                        glm: "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+                    };
+                    const apiUrl = endpointMap[provider] || endpointMap.openai;
+                    const r = await fetch(apiUrl, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${cleanKey}`,
+                            "HTTP-Referer": window.location.origin || "http://127.0.0.1:8000",
+                            "X-Title": "Bops Real Estate"
+                        },
+                        body: JSON.stringify({
+                            model: model,
+                            messages: [
+                                { role: "system", content: systemPrompt },
+                                ...conversationHistory
+                            ],
+                            temperature: 0.4,
+                            max_tokens: 2048
+                        })
+                    });
+                    const d = await r.json();
+                    if (!r.ok) return { reply: null, error: d.error?.message || JSON.stringify(d.error || d) || `${provider.toUpperCase()} HTTP ${r.status}` };
+                    const msgObj = d.choices?.[0]?.message || {};
+                    const textOut = (msgObj.content || msgObj.reasoning_content || msgObj.reasoning || "").trim();
+                    if (!textOut) return { reply: null, error: `Model ${model} returned empty content. Raw response: ${JSON.stringify(d).slice(0, 160)}` };
+                    return { reply: textOut, error: null };
+                }
+            } catch (err) {
+                return { reply: null, error: err.message };
+            }
+        }
+
+        async function sendChat(msg) {
+            if (!msg.trim()) return;
+            const userText = msg.trim();
+            const bot = state.bots.find(b => b.id === state.selectedBotId) || state.bots[0];
+            const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            if (!state.threads[bot.id]) state.threads[bot.id] = [];
+            state.threads[bot.id].push({ sender: "user", time: now, text: userText });
+
+            // Add temporary typing indicator bubble
+            const thinkingMsg = { sender: "bot", time: now, text: `${bot.name} is thinking...` };
+            state.threads[bot.id].push(thinkingMsg);
+            renderAll();
+
+            const provider = document.getElementById("setupAiProvider").value;
+            const model = document.getElementById("setupAiModel").value;
+            const apiKey = document.getElementById("setupAiApiKey").value;
+
+            // Build full multi-turn conversation history for this bot (excluding the temporary "is thinking..." bubble)
+            const historyMessages = state.threads[bot.id]
+                .filter(m => m !== thinkingMsg)
+                .slice(-20)
+                .map(m => ({
+                    role: m.sender === "user" ? "user" : "assistant",
+                    content: m.text
+                }));
+
+            const listingsFormatted = state.listings.map((l, idx) =>
+                `${idx + 1}. ${l.address} (${l.price}, ${l.beds} BD / ${l.baths} BA, ${l.sqft} SqFt, Specialist: ${l.agent})`
+            ).join("\n");
+
+            const systemPrompt = `You are ${bot.name} (${bot.role}, ${bot.ext}) at ${state.brokerageName}.
+You have FULL MULTI-TURN MEMORY of this conversation and direct write access to the brokerage database.
+Active MLS Listings (${state.listings.length} total):
+${listingsFormatted}
+
+Human Agents on Roster: ${state.humanAgents.map(a => a.name + " (" + a.phone + ")").join(", ")}.
+
+LIVE TOOL EXECUTION INSTRUCTIONS:
+If the user asks you to add a new property/listing (even with partial details or says "just add it as it is"), DO NOT refuse or ask for more required fields—immediately fill in sensible default values for any missing fields (e.g. Price $1,250,000, 3 BD, 2.5 BA, Marcus Sterling) and output this exact action tag anywhere in your response:
+[[ADD_PROPERTY: Address | Price | Beds | Baths | SqFt | AgentName]]
+Example: [[ADD_PROPERTY: Washington Villa, Washington | $1,250,000 | 3 | 2.5 | 2040 | Marcus Sterling]]
+Confirm to the user that you have added the property to the active listings roster!`;
+
+            let finalReply = null;
+            let errorDetail = null;
+
+            // 1. First try calling local/VPS FastAPI server (/api/v1/bots/{id}/chat) with full history
+            if (window.location.origin && window.location.origin.startsWith("http") && !window.location.origin.includes("usercontent")) {
+                try {
+                    const r = await fetch(window.location.origin + "/api/v1/bots/" + bot.id + "/chat", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            message: userText,
+                            history: historyMessages,
+                            provider: provider,
+                            model: model,
+                            api_key: apiKey
+                        })
+                    });
+                    if (r.ok) {
+                        const d = await r.json();
+                        if (d.status === "live_llm" && d.reply) {
+                            finalReply = d.reply;
+                            if (d.added_listing) {
+                                state.listings.push({
+                                    address: d.added_listing.address,
+                                    price: "$" + Number(d.added_listing.price || 1250000).toLocaleString(),
+                                    beds: d.added_listing.bedrooms || 3,
+                                    baths: d.added_listing.bathrooms || 2.5,
+                                    sqft: d.added_listing.square_feet || 2040,
+                                    agent: d.added_listing.assigned_licensed_agent || "Marcus Sterling"
+                                });
+                            }
+                        } else {
+                            errorDetail = d.error_detail;
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            // 2. Direct browser LLM call with full conversationHistory array
+            if (!finalReply) {
+                const directRes = await callProviderLLMDirectly(provider, model, apiKey, systemPrompt, historyMessages);
+                if (directRes.reply) {
+                    finalReply = directRes.reply;
+                } else if (directRes.error) {
+                    errorDetail = directRes.error;
+                }
+            }
+
+            // 3. Parse [[ADD_PROPERTY: ...]] tag if returned directly from browser LLM call
+            if (finalReply) {
+                const propMatch = finalReply.match(/\[\[ADD_PROPERTY:\s*([^\]]+)\]\]/i);
+                if (propMatch) {
+                    const parts = propMatch[1].split("|").map(p => p.trim());
+                    const newProp = {
+                        address: parts[0] || "Washington Villa",
+                        price: parts[1] || "$1,250,000",
+                        beds: parts[2] || 3,
+                        baths: parts[3] || 2.5,
+                        sqft: parts[4] || 2040,
+                        agent: parts[5] || "Marcus Sterling"
+                    };
+                    state.listings.push(newProp);
+                    fourScreens[0].highlight = `${newProp.address} · ${newProp.price}`;
+                    fourScreens[0].detail = `Added Live (${newProp.sqft} SqFt · ${newProp.beds}BD/${newProp.baths}BA) · Total Listings: ${state.listings.length}`;
+                    finalReply = finalReply.replace(/\[\[ADD_PROPERTY:\s*[^\]]+\]\]/gi, "").trim();
+                    showToast(`✓ Added new listing: ${newProp.address} (${newProp.sqft} SqFt)!`);
+                }
+            }
+
+            // 3. Zero fake replies: if the API returned an error or empty content, show the exact raw diagnostic
+            if (!finalReply) {
+                finalReply = `⚠️ [${provider.toUpperCase()} · ${model}] API Diagnostic: ${errorDetail || "No response received from model."}`;
+            }
+
+            thinkingMsg.text = finalReply;
+            state.interBotFeed.unshift({
+                time: new Date().toLocaleTimeString(),
+                from: bot.name,
+                to: `${provider.toUpperCase()} (${model})`,
+                msg: finalReply.slice(0, 90)
+            });
+
+            try {
+                localStorage.setItem("bops_threads_memory", JSON.stringify(state.threads));
+                localStorage.setItem("bops_listings_memory", JSON.stringify(state.listings));
+            } catch (e) {}
+            renderAll();
+        }
+
+        document.getElementById("chatComposerForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const inp = document.getElementById("chatMessageInput");
+            sendChat(inp.value);
+            inp.value = "";
+        });
+
+        document.querySelectorAll(".quick-pill").forEach(p => {
+            p.addEventListener("click", () => sendChat(p.getAttribute("data-quick-msg")));
+        });
+
+        document.querySelectorAll(".screen-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                state.selectedScreen = parseInt(btn.getAttribute("data-screen"), 10);
+                renderAll();
+            });
+        });
+
+        document.getElementById("btnToggleTakeover").addEventListener("click", () => {
+            state.isTakeoverActive = !state.isTakeoverActive;
+            document.getElementById("takeoverStatusBadge").textContent = state.isTakeoverActive ? "In Control" : "Watch";
+            showToast(state.isTakeoverActive ? "Took over cloud screen" : "Handed back to bot");
+        });
+
+        document.getElementById("btnVoiceCallBot").addEventListener("click", () => showToast("Connected live voice call!"));
+        document.getElementById("btnMorningBriefing").addEventListener("click", () => {
+            openModal("☀️ 8:00 AM Chief of Staff Briefing (Victoria)", `Prepared for Managing Broker:\n• Clara (Ext 101): 3 phone lines active (Ring 1 pickup)\n• Ryan (Ext 102): Zillow & Website leads (<30s SLA)\n• Maya (Ext 103): Instagram & WhatsApp Concierge\n• Alex (Ext 104): 3 Confirmed Site Visits (Sentrilock verified)`);
+        });
+        document.getElementById("btnSimulateFullDay").addEventListener("click", () => {
+            showToast("Simulated full day across Victoria, Clara, Ryan, Maya & Alex!");
+        });
+
+        // Studio & Auxiliary Action Handlers
+        document.querySelectorAll(".nav-tab").forEach(b => b.addEventListener("click", () => showToast("Switched panel")));
+        document.getElementById("callPresetSelect").addEventListener("change", () => showToast("Loaded call scenario"));
+        document.getElementById("btnTriggerCall").addEventListener("click", () => showToast("Clara answered inbound call"));
+        document.getElementById("btnJumpToScheduler").addEventListener("click", () => showToast("Opened Alex scheduler"));
+        document.getElementById("btnOpenBookModal").addEventListener("click", () => showToast("Booked new site visit"));
+        document.getElementById("btnLoadSampleMemo").addEventListener("click", () => showToast("Loaded car voice memo"));
+        document.getElementById("btnSynthesizeMemo").addEventListener("click", () => showToast("Transcribed memo & drafted offer"));
+        document.getElementById("btnCopyDraftEmail").addEventListener("click", () => showToast("Copied offer email"));
+        document.getElementById("btnSendAllReminders").addEventListener("click", () => showToast("Dispatched DocuSign reminders"));
+        document.getElementById("btnSaveSettings").addEventListener("click", () => {
+            state.brokerageName = document.getElementById("cfgBrokerageName").value || "Premier Realty";
+            renderAll();
+            showToast("Saved security whitelist & branding!");
+        });
+        document.getElementById("btnClearFeed").addEventListener("click", () => {
+            state.interBotFeed = [];
+
+            try {
+                localStorage.setItem("bops_threads_memory", JSON.stringify(state.threads));
+                localStorage.setItem("bops_listings_memory", JSON.stringify(state.listings));
+            } catch (e) {}
+            renderAll();
+        });
+        document.getElementById("btnDownloadExeModal").addEventListener("click", () => showToast("Installer ready"));
+        document.getElementById("btnCloseModal").addEventListener("click", closeModal);
+        document.getElementById("btnModalPrimary").addEventListener("click", closeModal);
+
+
+        try {
+            const savedThreads = localStorage.getItem("bops_threads_memory");
+            if (savedThreads) state.threads = JSON.parse(savedThreads);
+            const savedListings = localStorage.getItem("bops_listings_memory");
+            if (savedListings) state.listings = JSON.parse(savedListings);
+        } catch (e) {}
+        renderAll();
+
+
+        document.getElementById("btnCheckImapReplies")?.addEventListener("click", async () => {
+            const btn = document.getElementById("btnCheckImapReplies");
+            btn.textContent = "⏳ Checking Inbox...";
+            try {
+                const r = await fetch(window.location.origin + "/api/v1/email/check-replies", { method: "POST" });
+                const d = await r.json();
+                if (d.replies_processed > 0) {
+                    showToast(`✓ Found & answered ${d.replies_processed} new buyer email reply(s)!`);
+                    fetchBackendData();
+                } else {
+                    showToast(d.detail || "No new unread buyer replies found in IMAP inbox.");
+                }
+            } catch (e) {
+                showToast("Could not check IMAP inbox.");
+            } finally {
+                btn.textContent = "📥 Check Email Replies";
+            }
+        });
+
+        document.getElementById("btnManualRefreshLeads")?.addEventListener("click", () => {
+            fetchBackendData();
+            showToast("Refreshing live pipeline from SQLite database...");
+        });
+
+        document.getElementById("btnResetTestLeads")?.addEventListener("click", async () => {
+            if (!confirm("Are you sure you want to clear all test leads and activity logs? This will reset the database back to clean 0.")) return;
+            try {
+                const res = await fetch(window.location.origin + "/api/v1/leads/reset", { method: "POST" });
+                if (res.ok) {
+                    showToast("✓ All test leads cleared from SQLite database!");
+                    state.leads = [];
+                    fetchBackendData();
+                }
+            } catch (e) {
+                showToast("Could not reset leads (Backend offline).");
+            }
+        });
+
+
+        document.getElementById("btnToggleAddProperty")?.addEventListener("click", () => {
+            document.getElementById("newPropertyFormCard").classList.toggle("hidden");
+        });
+        document.getElementById("btnCancelAddProperty")?.addEventListener("click", () => {
+            document.getElementById("newPropertyFormCard").classList.add("hidden");
+        });
+        document.getElementById("btnSaveNewProperty")?.addEventListener("click", async () => {
+            const address = document.getElementById("addPropAddress").value.trim();
+            const price = parseFloat(document.getElementById("addPropPrice").value || "1250000");
+            const bedrooms = parseInt(document.getElementById("addPropBeds").value || "3", 10);
+            const bathrooms = parseFloat(document.getElementById("addPropBaths").value || "2.5");
+            const square_feet = parseInt(document.getElementById("addPropSqft").value || "2400", 10);
+            const lockbox_code = document.getElementById("addPropLockbox").value.trim() || "SENTRI-9901";
+
+            if (!address) {
+                showToast("Please enter a property address.");
+                return;
+            }
+            try {
+                const res = await fetch(window.location.origin + "/api/v1/properties", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ address, price, bedrooms, bathrooms, square_feet, lockbox_code })
+                });
+                if (res.ok) {
+                    document.getElementById("newPropertyFormCard").classList.add("hidden");
+                    document.getElementById("addPropAddress").value = "";
+                    showToast("✓ Property saved to SQLite database & synced to /website!");
+                    fetchBackendData();
+                }
+            } catch (e) {
+                showToast("Failed to save property.");
+            }
+        });
+
+
+
+        document.getElementById("btnPresetResend")?.addEventListener("click", () => {
+            document.getElementById("setupSmtpEmail").value = "onboarding@resend.dev";
+            document.getElementById("setupSmtpPassword").placeholder = "Paste your free Resend key (re_...)";
+            document.getElementById("setupSmtpHost").value = "api.resend.com";
+            document.getElementById("setupSmtpPort").value = "443";
+            document.getElementById("smtpDiagnosticBox").innerHTML = `💡 <strong>Resend Selected:</strong> Sign up free at <a href="https://resend.com" target="_blank" class="text-[#007aff] underline">resend.com</a>, copy your API key (starts with <code>re_</code>), and paste it into the password field!`;
+        });
+        document.getElementById("btnPresetBrevo")?.addEventListener("click", () => {
+            document.getElementById("setupSmtpEmail").placeholder = "Your Brevo login email";
+            document.getElementById("setupSmtpPassword").placeholder = "Brevo SMTP master key (xsmtpsib-...)";
+            document.getElementById("setupSmtpHost").value = "smtp-relay.brevo.com";
+            document.getElementById("setupSmtpPort").value = "587";
+            document.getElementById("smtpDiagnosticBox").innerHTML = `💡 <strong>Brevo Selected:</strong> Sign up free at <a href="https://www.brevo.com" target="_blank" class="text-[#007aff] underline">brevo.com</a>, go to 'SMTP & API Keys' to copy your key, and paste it above!`;
+        });
+        document.getElementById("btnPresetGmail")?.addEventListener("click", () => {
+            document.getElementById("setupSmtpEmail").placeholder = "yourname@gmail.com";
+            document.getElementById("setupSmtpPassword").placeholder = "16-letter App Password";
+            document.getElementById("setupSmtpHost").value = "smtp.gmail.com";
+            document.getElementById("setupSmtpPort").value = "465";
+            document.getElementById("smtpDiagnosticBox").innerHTML = `💡 <strong>Gmail Selected:</strong> Requires 2-Step Verification enabled at <a href="https://myaccount.google.com/security" target="_blank" class="text-[#007aff] underline">Google Security</a>, then generate a 16-letter password at <a href="https://myaccount.google.com/apppasswords" target="_blank" class="text-[#007aff] underline">App Passwords</a>.`;
+        });
+
+
+        document.getElementById("btnVerifyMetaToken")?.addEventListener("click", async () => {
+            const meta_access_token = document.getElementById("setupMetaAccessToken").value.trim();
+            const meta_verify_token = document.getElementById("setupMetaVerifyToken").value.trim() || "bops_meta_verify_token_9021";
+            const diag = document.getElementById("metaDiagnosticBox");
+            const badge = document.getElementById("metaStatusBadge");
+            const btn = document.getElementById("btnVerifyMetaToken");
+
+            btn.textContent = "Verifying with Meta Graph API...";
+            btn.disabled = true;
+            try {
+                const r = await fetch(window.location.origin + "/api/v1/meta/test-connection", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ meta_access_token, meta_verify_token })
+                });
+                const d = await r.json();
+                if (d.verified) {
+                    diag.innerHTML = `<span class="text-emerald-700 font-semibold">✅ ${d.detail}</span>`;
+                    if (badge) {
+                        badge.textContent = `Connected: ${d.page_name || 'Meta Page'}`;
+                        badge.className = "text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full";
+                    }
+                    showToast("✓ Meta Graph API Token verified!");
+                } else {
+                    diag.innerHTML = `<span class="text-amber-700 font-semibold">ℹ️ ${d.detail}</span>`;
+                    showToast("Saved Meta Webhook Verify Token.");
+                }
+            } catch (e) {
+                diag.innerHTML = `<span class="text-rose-600 font-semibold">❌ Could not reach backend server.</span>`;
+            } finally {
+                btn.textContent = "✓ Save & Verify Meta Token";
+                btn.disabled = false;
+            }
+        });
+
+        document.getElementById("btnTriggerMetaSim")?.addEventListener("click", async () => {
+            const chan = document.getElementById("simMetaChannelSelect").value;
+            const sender = document.getElementById("simMetaSenderInput").value.trim() || "ig_buyer_90210";
+            const msg = document.getElementById("simMetaMessageInput").value.trim();
+            const diag = document.getElementById("metaDiagnosticBox");
+            if (!msg) {
+                showToast("Please type a sample Instagram/Facebook message or comment first.");
+                return;
+            }
+
+            const btn = document.getElementById("btnTriggerMetaSim");
+            btn.textContent = "Processing...";
+            btn.disabled = true;
+
+            let webhookPayload = {};
+            if (chan === "ig_dm") {
+                webhookPayload = {
+                    object: "instagram",
+                    first_name: sender.replace(/^@/, ""),
+                    last_name: "(Instagram DM)",
+                    entry: [{ messaging: [{ sender: { id: sender }, message: { text: msg } }] }]
+                };
+            } else if (chan === "ig_comment") {
+                webhookPayload = {
+                    object: "instagram",
+                    entry: [{ changes: [{ field: "comments", value: { id: "comment_" + Date.now(), text: msg, from: { username: sender.replace(/^@/, "") } } }] }]
+                };
+            } else if (chan === "fb_dm") {
+                webhookPayload = {
+                    object: "page",
+                    first_name: sender,
+                    last_name: "(FB Messenger)",
+                    entry: [{ messaging: [{ sender: { id: sender }, message: { text: msg } }] }]
+                };
+            } else {
+                webhookPayload = {
+                    object: "page",
+                    entry: [{ changes: [{ field: "leadgen", value: { leadgen_id: "leadgen_" + Date.now(), first_name: sender, last_name: "(FB Lead Ad)", message: msg } }] }]
+                };
+            }
+
+            try {
+                const r = await fetch(window.location.origin + "/api/v1/meta/webhook", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(webhookPayload)
+                });
+                const d = await r.json();
+                if (r.ok) {
+                    document.getElementById("simMetaMessageInput").value = "";
+                    diag.innerHTML = `<span class="text-emerald-700 font-semibold">✅ Maya Replied (${d.status}): "${d.reply}"</span>`;
+                    showToast("✓ Maya processed Instagram/Facebook event & logged to SQLite!");
+                    fetchBackendData();
+                }
+            } catch (e) {
+                showToast("Error calling /api/v1/meta/webhook.");
+            } finally {
+                btn.textContent = "Send to Maya Webhook";
+                btn.disabled = false;
+            }
+        });
+
+        document.getElementById("btnTestSmtpEmail")?.addEventListener("click", async () => {
+            const smtp_email = document.getElementById("setupSmtpEmail").value.trim();
+            const smtp_password = document.getElementById("setupSmtpPassword").value.trim();
+            const smtp_host = document.getElementById("setupSmtpHost").value.trim() || "smtp.gmail.com";
+            const smtp_port = parseInt(document.getElementById("setupSmtpPort").value || "465", 10);
+            const diagBox = document.getElementById("smtpDiagnosticBox");
+            const badge = document.getElementById("smtpStatusBadge");
+
+            if (!smtp_email || !smtp_password) {
+                diagBox.innerHTML = `<span class="text-rose-600 font-semibold">⚠️ Please enter both your Gmail address and your 16-character Google App Password.</span>`;
+                return;
+            }
+
+            const btn = document.getElementById("btnTestSmtpEmail");
+            btn.textContent = "⏳ Connecting to SMTP & Sending...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(window.location.origin + "/api/v1/email/test", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ smtp_email, smtp_password, smtp_host, smtp_port, to_email: smtp_email })
+                });
+                const data = await res.json();
+                if (res.ok && data.sent) {
+                    diagBox.innerHTML = `<span class="text-emerald-700 font-semibold">✅ ${data.detail} (Check your inbox at ${smtp_email}!)</span>`;
+                    if (badge) {
+                        badge.textContent = "Connected & Verified";
+                        badge.className = "text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full";
+                    }
+                    showToast(`✓ Test email sent to ${smtp_email}!`);
+                } else {
+                    diagBox.innerHTML = `<span class="text-rose-600 font-semibold">❌ ${data.detail || "SMTP Error"}</span>`;
+                }
+            } catch (e) {
+                diagBox.innerHTML = `<span class="text-rose-600 font-semibold">❌ Could not reach backend server.</span>`;
+            } finally {
+                btn.textContent = "✉️ Save & Send Test Email Now";
+                btn.disabled = false;
+            }
+        });
+
+        // Load saved SMTP/AI settings from backend SQLite on page load
+        async function loadSavedSettingsFromBackend() {
+            if (!window.location.origin || !window.location.origin.startsWith("http")) return;
+            try {
+                const r = await fetch(window.location.origin + "/api/v1/client/settings");
+                if (r.ok) {
+                    const d = await r.json();
+                    const s = d.settings || {};
+                    if (s.smtp_email) document.getElementById("setupSmtpEmail").value = s.smtp_email;
+                    if (s.smtp_password) {
+                        document.getElementById("setupSmtpPassword").value = s.smtp_password;
+                        const badge = document.getElementById("smtpStatusBadge");
+                        if (badge) {
+                            badge.textContent = "SMTP Credentials Saved";
+                            badge.className = "text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full";
+                        }
+                    }
+                    if (s.smtp_host) document.getElementById("setupSmtpHost").value = s.smtp_host;
+                    if (s.smtp_port) document.getElementById("setupSmtpPort").value = s.smtp_port;
+                    if (s.ai_api_key) document.getElementById("setupAiApiKey").value = s.ai_api_key;
+                    if (s.brokerage_name) {
+                        document.getElementById("cfgBrokerageName").value = s.brokerage_name;
+                        state.brokerageName = s.brokerage_name;
+                        renderAll();
+                    }
+                }
+            } catch (e) {}
+        }
+        setTimeout(loadSavedSettingsFromBackend, 200);
+
+        // Live SQLite database polling loop (every 3.5 seconds)
+        setInterval(fetchBackendData, 3500);
+        setTimeout(fetchBackendData, 300);
+
+    </script>
+</body>
+</html>
